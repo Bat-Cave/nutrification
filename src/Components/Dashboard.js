@@ -3,11 +3,25 @@ import React from 'react';
 const Dashboard = (props) => {
   return(
     <div className='container'>
+      <h1>DASHBOARD</h1>
       <div className="dash-top">
-        <h2>Hello, {'{User}'}</h2>
+        <div className='welcome-container'>
+          <h2>Hello, {'{User}'}</h2>
+        </div>
+        <div className='recommendations'>
+          <p>Based on your information, you need:</p>
+          <ul>
+            <li><span className='rec-span'>{'{Water}'}</span> cups of Water</li>
+            <li><span className='rec-span'>{'{Calories}'}</span> Calories</li>
+            <li><span className='rec-span'>{'{Protein}'}</span> grams of Protein</li>
+            <li><span className='rec-span'>{'{Carbs}'}</span> grams of Carbohydrates</li>
+            <li><span className='rec-span'>{'{Fat}'}</span> grams of Fat</li>
+          </ul>
+        </div>
       </div>
       <div className='dash-bottom'>
         <div className='table-header'>
+          <div className='column'><p></p></div>
           <div className='date'><p>Date</p></div>
           <div className='column'><p>Water</p></div>
           <div className='column'><p>Calories</p></div>

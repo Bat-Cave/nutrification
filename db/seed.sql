@@ -22,10 +22,11 @@ create table nutrition_history (
     entry_id serial primary key,
     user_id int,
     entry_date varchar(12),
+    entry_time varchar(20),
     biotin varchar(100),
     folate_folic_acid varchar(100),
     niacin varchar(100),
-    panthothenic_acid varchar(100),
+    pantothenic_acid varchar(100),
     riboflavin varchar(100),
     thiamin varchar(100),
     vitamin_a varchar(100),
@@ -50,5 +51,7 @@ create table nutrition_history (
     sodium varchar(100),
     zinc varchar(100),
     protein varchar(100),
-    fiber varchar(100)
+    fiber varchar(100),
+    water varchar(100),
+    carbohydrates varchar(100)
 );
