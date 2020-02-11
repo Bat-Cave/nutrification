@@ -14,7 +14,7 @@ create table macronutrients (
     m_id serial primary key,
     m_name varchar(150),
     m_type varchar(150),
-    m_recommended int,
+    m_recommended decimal,
     m_units varchar(5)
 );
 
