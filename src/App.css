@@ -117,8 +117,8 @@ body{
 .column{
   display: inline-block;
   width: auto;
-  height: 50px;
-  padding: 12px;
+  height: 30px;
+  padding: 4px;
   border-right: 1px solid white;
   border-bottom: 4px solid white;
   background: black;
@@ -142,11 +142,11 @@ body{
 }
 
 .v {
-  border-bottom: 4px solid lightcoral
+  border-bottom: 4px solid orange
 }
 
 .m {
-  border-bottom: 4px solid lightgreen;
+  border-bottom: 4px solid green;
 }
 
 .p {
@@ -202,7 +202,7 @@ body{
 }
 
 .entry-top{
-  height: 40%;
+  height: 60%;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -214,34 +214,70 @@ body{
 .entry-top input{
   margin-right: 16px;
   width: 200px;
+  height: 30px;
   text-align: center
+}
+
+.search-table{
+  width: 100%;
+  height: 80%;
+}
+
+.search-header{
+  height: 30px;
+  width: calc(100% - 8px);
+  margin: 0;
 }
 
 .search-container{
   width: 100%;
   height: 100%;
   margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
 }
 .search-container input{
-  width: 100%;
+  width: 80%;
   height: 35px;
   padding: 0 12px;
   border: none;
   text-align: left;
-  border-bottom: 2px solid lightcoral;
+  border-bottom: 2px solid orange;
   outline: none;
 }
 
 .search-results{
-  height: calc(100% - 43px);
+  height: calc(100% - 40px);
   width: 100%;
   margin-top: 8px;
   box-shadow: inset 0 0 4px 4px rgba(65, 65, 65, 0.5);
+  overflow-y: scroll;
+}
 
+.search-result{
+  height: 30px;
+  width: 100%;
+  display: flex;
+}
+
+.search-result:nth-child(2n+1){
+  background: rgba(168, 168, 168, 0.5);
+}
+
+.search-column{
+  width: 25%;
+  height: 30px;
+  border-right: 1px solid black;
+  color: black;
+  text-align: center;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .entry-bottom{
-  height: 60%;
+  height: 40%;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -250,7 +286,8 @@ body{
 
 .r {
   width: 25%;
-  border-bottom: 4px solid lightcoral;
+  border-bottom: 4px solid orange;
+  margin: 0;
 }
 
 .auth-container {
@@ -275,23 +312,6 @@ body{
   animation: fade-in 1s;
 }
 
-.login-box button {
-  width: 100px;
-  height: 25px;
-  border: none;
-  background: orange;
-  outline: none;
-  cursor: pointer;
-  transition: .25s all ease;
-}
-
-.login-box button:hover {
-  width: 110px;
-  height: 25px;
-  border: none;
-  background: rgba(255, 166, 0, 0.75);
-  letter-spacing: 3px;
-}
 
 .logo {
   position: fixed;
@@ -386,6 +406,24 @@ a:nth-of-type(2n + 1):visited{
 }
 
 a:hover{
+  letter-spacing: 3px;
+}
+
+button {
+  width: 100px;
+  height: 25px;
+  border: none;
+  background: orange;
+  outline: none;
+  cursor: pointer;
+  transition: .25s all ease;
+}
+
+button:hover {
+  width: 110px;
+  height: 25px;
+  border: none;
+  background: rgba(255, 166, 0, 0.75);
   letter-spacing: 3px;
 }
 
