@@ -108,17 +108,19 @@ body{
 }
 
 .table-header{
-  width: 100%;
+  width: auto;
   height: 100%;
   display: flex;
-  justify-content: flex-start;
 }
 
 .column{
-  display: inline-block;
-  width: auto;
-  height: 30px;
-  padding: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0 8px;
+  width: 100px;
+  height: 40px;
   border-right: 1px solid white;
   border-bottom: 4px solid white;
   background: black;
@@ -127,10 +129,14 @@ body{
 }
 
 .date {
-  display: block;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
   width: 100px;
-  height: 50px;
-  padding: 12px;
+  height: 40px;
+  padding: 0 8px;
   border-right: 1px solid white;
   border-bottom: 4px solid white;
   background: black;
@@ -152,6 +158,10 @@ body{
 .p {
   border: none;
   border-bottom: 4px solid white;
+}
+
+.s{
+  width: 50px;
 }
 
 .column p {
@@ -196,48 +206,45 @@ body{
 .history-table{
   height: 90%;
   width: 100%;
-  margin-top: 64px;
+  margin-top: 16px;
   overflow-x: scroll;
   background: rgba(200, 200, 200, 0.75);
 }
 
-.entry-top{
-  height: 60%;
+.entry-section{
+  height: 50%;
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-end;
   padding: 16px 0;
 }
 
-.entry-top input{
+.entry-section input{
   margin-right: 16px;
+  margin-bottom: 16px;
   width: 200px;
   height: 30px;
   text-align: center
 }
 
-.search-table{
+.date-input{
   width: 100%;
-  height: 80%;
-}
-
-.search-header{
-  height: 30px;
-  width: calc(100% - 8px);
-  margin: 0;
-}
-
-.search-container{
-  width: 100%;
-  height: 100%;
-  margin-top: 16px;
+  height: 50px;
   display: flex;
-  flex-wrap: wrap;
+  justify-content: flex-end;
 }
-.search-container input{
-  width: 80%;
+
+.search-top{
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.search-top input{
+  width: 40%;
   height: 35px;
   padding: 0 12px;
   border: none;
@@ -246,10 +253,30 @@ body{
   outline: none;
 }
 
-.search-results{
-  height: calc(100% - 40px);
+.search-table{
   width: 100%;
-  margin-top: 8px;
+  height: calc(100% - 50px);
+}
+
+.search-header{
+  height: 30px;
+  width: calc(100% - 8px);
+  display: flex;
+  margin-right: 8px;
+}
+
+.search-container{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-results{
+  height: calc(100% - 50px);
+  width: 100%;
   box-shadow: inset 0 0 4px 4px rgba(65, 65, 65, 0.5);
   overflow-y: scroll;
 }
@@ -265,7 +292,7 @@ body{
 }
 
 .search-column{
-  width: 25%;
+  width: 30%;
   height: 30px;
   border-right: 1px solid black;
   color: black;
@@ -276,18 +303,13 @@ body{
   align-items: center;
 }
 
-.entry-bottom{
-  height: 40%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 0;
+.f {
+  width: 10%;
 }
 
 .r {
   width: 25%;
   border-bottom: 4px solid orange;
-  margin: 0;
 }
 
 .auth-container {

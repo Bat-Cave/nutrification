@@ -21,7 +21,7 @@ const Dashboard = (props) => {
       </div>
       <div className='dash-bottom'>
         <div className='table-header'>
-          <div className='column'><p></p></div>
+          <div className='column s'><p></p></div>
           <div className='date'><p>Date</p></div>
           <div className='column'><p>Water</p></div>
           <div className='column'><p>Calories</p></div>
@@ -55,7 +55,7 @@ const Dashboard = (props) => {
           <div className='column m'><p>Selenium</p></div>
           <div className='column m'><p>Sodium</p></div>
           <div className='column m'><p>Zinc</p></div>
-          <div className='column'><p></p></div>
+          <div className='column s'><p></p></div>
         </div>
       </div>
     </div>

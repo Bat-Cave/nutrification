@@ -21,6 +21,7 @@ create table macronutrients (
 create table nutrition_history (
     entry_id serial primary key,
     user_id int,
+    meal_name varchar(100),
     entry_date varchar(12),
     entry_time varchar(20),
     biotin varchar(100),
