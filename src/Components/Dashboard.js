@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Dashboard = (props) => {
+  console.log(props);
   return(
     <div className='container'>
       <h1>DASHBOARD</h1>

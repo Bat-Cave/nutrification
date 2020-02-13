@@ -1,5 +1,6 @@
 import React from 'react';
 import { uploadFile } from 'react-s3';
+import axios from 'axios';
 
 
 const config = {
@@ -13,11 +14,18 @@ const config = {
 let profile = '';
 
 const upload = (e) =>{
-  console.log(e.target.files[0]);
-  uploadFile( e.target.files[0], config)
+  let file = e.target.files[0];
+  let name = 'user/' + file.name;
+  file = {...file, name: name};
+  uploadFile( file, config)
   .then( (data) => {
     profile = data.location
     console.log(profile);
+    axios.post('/api/profile/image').then(res => {
+      console.log('Updated Profile Picture')
+    }).catch(err => {
+      console.log(err)
+    })
   })
   .catch( (err) => {
     alert(err);

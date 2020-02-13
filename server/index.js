@@ -20,6 +20,8 @@ app.use(session({
 
 app.post('/api/register', ctrl.register)
 app.post('/api/login', ctrl.login)
+app.get('/api/me', ctrl.getMe)
+app.post('/api/profile/image', ctrl.updateProfilePicture)
 
 
 massive(CONNECTION_STRING).then(db => {

@@ -46,7 +46,6 @@ class Auth extends Component {
 
     axios.post('/api/register', {first_name, last_name, email, password, height, weight, age, activity_level, gender, rec_daily_calorie, rec_daily_protein, rec_daily_carb, rec_daily_fat, rec_daily_water}).then(res => {
       this.props.updateUser(res.data);
-      console.log(res.data)
     }).catch(err => {
       console.log(err);
     })

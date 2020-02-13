@@ -31,4 +31,19 @@ module.exports = {
       req.session.user = user[0];
       res.status(202).send(req.session.user);
     },
+    getMe: async (req, res) => {
+        if(req.session.user){
+          const {user_id} = req.session.user;
+          const db = req.app.get('db');
+          console.log('Hit get user')
+          const userInfo = await db.get_me(user_id);
+          console.log(userInfo);
+          res.status(200).send(userInfo[0]);
+        } else {
+          res.status(402).send('User not found');
+        }
+    },
+    updateProfilePicture: async (req, res) => {
+        const {url} = req.body
+    }
 }

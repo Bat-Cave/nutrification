@@ -74,7 +74,7 @@ body{
 }
 
 .welcome-container{
-  width: 50%;
+  width: 35%;
   height: 100%;
   margin-right: 8px;
   display: flex;
@@ -85,7 +85,7 @@ body{
 
 
 .recommendations{
-  width: 50%;
+  width: 65%;
   height: 100%;
   margin-left: 8px;
   padding: 32px;
