@@ -1,13 +1,20 @@
 create table users (
     user_id serial primary key,
+    first_name varchar(200),
+    last_name varchar(200),
     email varchar(150),
     password varchar(150),
     profile_pic varchar(250),
     height int,
     weight int,
+    gender varchar(10),
     age int,
     activity_level varchar(150),
-    rec_daily_calorie int
+    rec_daily_calorie int,
+    rec_daily_protein int,
+    rec_daily_carb int,
+    rec_daily_fat int,
+    rec_daily_water int
 );
 
 create table macronutrients (

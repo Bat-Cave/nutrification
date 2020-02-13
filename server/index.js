@@ -18,9 +18,8 @@ app.use(session({
   cookie: {maxAge: 1000 * 60 * 60 * 10}
 }))
 
-//ENDPOINTS
-
-
+app.post('/api/register', ctrl.register)
+app.post('/api/login', ctrl.login)
 
 
 massive(CONNECTION_STRING).then(db => {

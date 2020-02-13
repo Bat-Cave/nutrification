@@ -177,8 +177,16 @@ body{
   padding: 16px 0;
 }
 
-.prof-top img{
-  height: 100%;
+.prof-image{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 240px;
+  width: 200px;
+}
+
+.prof-image img{
+  height: 200px;
   width: auto;
   border-radius: 50%;
 }
@@ -307,6 +315,12 @@ body{
   width: 10%;
 }
 
+.h{
+  background: black;
+  color: white;
+  border-bottom: 4px solid orange;
+}
+
 .r {
   width: 25%;
   border-bottom: 4px solid orange;
@@ -368,6 +382,22 @@ body{
   outline: none;
 }
 
+.name-input {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.name-input input {
+  width: 49%;
+  height: 30px;
+  margin: 8px 0;
+  padding: 0 8px;
+  border: none;
+  border-bottom: 2px solid green;
+  outline: none;
+}
+
 .login-inputs select {
   width: 50%;
   height: 30px;
@@ -377,6 +407,24 @@ body{
 
 .message{
   width: 60%;
+}
+
+.error-container{
+  height: 30px;
+  width: 50%;
+}
+
+.error{
+  transition: all .5s ease;
+  position: absolute;
+  color: red;
+  font-size: 14px;
+  text-align: center;
+  opacity: 1;
+}
+
+.hidden{
+  opacity: 0;
 }
 
 .register-button {

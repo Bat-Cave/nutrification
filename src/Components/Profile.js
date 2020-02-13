@@ -1,4 +1,29 @@
 import React from 'react';
+import { uploadFile } from 'react-s3';
+
+
+const config = {
+  bucketName: 'nutrification',
+  dirName: 'images',
+  region: 'us-west-1',
+  accessKeyId: 'AKIAJD6BEFPJUNSBAR5Q',
+  secretAccessKey: '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',
+}
+
+let profile = '';
+
+const upload = (e) =>{
+  console.log(e.target.files[0]);
+  uploadFile( e.target.files[0], config)
+  .then( (data) => {
+    profile = data.location
+    console.log(profile);
+  })
+  .catch( (err) => {
+    alert(err);
+  })
+}
+
 
 const Profile = (props) => {
   return(
@@ -6,7 +31,10 @@ const Profile = (props) => {
       <h1>PROFILE</h1>
       <div className='prof-top'>
           <h2>{'{User_First}'}{'{User_Last}'}</h2>
-          <img src={'https://static.scrum.org/web/images/profile-placeholder.png'} alt='profile'/>
+          <div className='prof-image'>
+            <img src={profile || 'https://static.scrum.org/web/images/profile-placeholder.png'} alt='profile'/>
+            <input type='file' onChange={upload}/>
+          </div>
       </div>
       <div className='prof-bottom'>
         <div className='profile-info'>
@@ -28,6 +56,10 @@ const Profile = (props) => {
           </div>
           <div className='profile-row'>
             <h4>Activity Level</h4>
+            <input type='text' />
+          </div>
+          <div className='profile-row'>
+            <h4>{profile.toString()}</h4>
             <input type='text' />
           </div>
         </div>

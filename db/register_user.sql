@@ -1,0 +1,33 @@
+insert into users 
+(
+  first_name,
+  last_name,
+  email, 
+  password, 
+  height, 
+  weight, 
+  age, 
+  gender, 
+  activity_level,
+  rec_daily_calorie,
+  rec_daily_protein,
+  rec_daily_carb,
+  rec_daily_fat,
+  rec_daily_water
+  )
+values
+($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+returning 
+  first_name,
+  last_name,
+  email, 
+  height, 
+  weight, 
+  age, 
+  gender, 
+  activity_level,
+  rec_daily_calorie,
+  rec_daily_protein,
+  rec_daily_carb,
+  rec_daily_fat,
+  rec_daily_water

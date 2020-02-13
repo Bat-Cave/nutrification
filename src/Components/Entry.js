@@ -92,16 +92,16 @@ class Entry extends Component{
           </div>
           <div className='search-container'>
             <div className='search-top'>
-              <input name='searchIn' value={this.state.searchIn} type='search' placeholder='Search for food...' onChange={(e)=> this.handleInput(e.target.name, e.target.value)}/>
+              <input name='searchIn' value={this.state.searchIn} type='search' autoComplete='off' placeholder='Search for food...' onChange={(e)=> this.handleInput(e.target.name, e.target.value)}/>
               <input name='brandIn' value={this.state.brandIn} type='search' placeholder='Brand (optional)...' onChange={(e)=> this.handleInput(e.target.name, e.target.value)}/>
               <button onClick={() => this.search()}><i className="fas fa-search"></i></button>
             </div>
             <div className='search-table'>
               <div className='search-header'>
-                <div className='search-column'>Add</div>
-                <div className='search-column f'>FDC ID</div>
-                <div className='search-column'>Description</div>
-                <div className='search-column'>Brand</div>
+                <div className='search-column h'>Add</div>
+                <div className='search-column f h'>FDC ID</div>
+                <div className='search-column h'>Description</div>
+                <div className='search-column h'>Brand</div>
               </div>
               <div className='search-results'>
                 {searchResults}
@@ -117,10 +117,10 @@ class Entry extends Component{
             <input name='mealName' type='text' placeholder='Meal Name...'/>
           </div>
           <div className='search-header'>
-            <div className='search-column '>Date</div>
-            <div className='search-column f'>FDC ID</div>
-            <div className='search-column '>Description</div>
-            <div className='search-column '>Brand</div>
+            <div className='search-column h'>Date</div>
+            <div className='search-column f h'>FDC ID</div>
+            <div className='search-column h'>Description</div>
+            <div className='search-column h'>Brand</div>
           </div>
             <div className='search-results'>
               {mealItems}

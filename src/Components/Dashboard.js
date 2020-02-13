@@ -6,7 +6,7 @@ const Dashboard = (props) => {
       <h1>DASHBOARD</h1>
       <div className="dash-top">
         <div className='welcome-container'>
-          <h2>Hello, {'{User}'}</h2>
+          <h2>Hello{props.first_name ? `, ${props.first_name}` : null}</h2>
         </div>
         <div className='recommendations'>
           <p>Based on your information, you need:</p>

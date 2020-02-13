@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
+import axios from 'axios';
+import {updateUser} from '../dux/reducer'
 
 class Auth extends Component {
   constructor(props){
@@ -7,25 +10,132 @@ class Auth extends Component {
 
     this.state = {
       class: 'register-big',
-      emailIn: '',
-      passwordIn:'',
-      cPasswordIn: '',
-      activityLevel: '',
+      errorClass: 'error hidden',
+      first_name: '',
+      last_name: '',
+      email: '',
+      password:'',
+      cpassword: '',
+      activity_level: '',
       height: '',
       weight: '',
       age: '',
-      gender: ''
+      gender: '',
+      rec_daily_calorie: 0,
+      rec_daily_protein: 0,
+      rec_daily_carb: 0,
+      rec_daily_fat: 0,
+      rec_daily_water: 0
+
     }
   }
 
   handleInput = (name, val) => {
-    console.log(`${name}:${val}`)
+    console.log(`${name}: ${val}`)
     this.setState({[name]: val})
   }
 
+  registerUser = async () => {
+    await this.calculateCalorieIntake();
+    await this.calculateProteinIntake();
+    await this.calculateCarbIntake();
+    await this.calculateFatIntake();
+    await this.calculateWaterIntake();
+    
+    const {first_name, last_name, email, password, activity_level, height, weight, age, gender, rec_daily_calorie, rec_daily_protein, rec_daily_carb, rec_daily_fat, rec_daily_water} = this.state;
 
+    axios.post('/api/register', {first_name, last_name, email, password, height, weight, age, activity_level, gender, rec_daily_calorie, rec_daily_protein, rec_daily_carb, rec_daily_fat, rec_daily_water}).then(res => {
+      this.props.updateUser(res.data);
+      console.log(res.data)
+    }).catch(err => {
+      console.log(err);
+    })
+    console.log(`Calorie Intake: ${this.state.rec_daily_calorie}`)
+    console.log(`Protein Intake: ${this.state.rec_daily_protein}`)
+    console.log(`Carb Intake: ${this.state.rec_daily_carb}`);
+    console.log(`Fat Intake: ${this.state.rec_daily_fat}`);
+    console.log(`Water Intake: ${this.state.rec_daily_water}`)
+    this.props.history.push('/');
+  }
+  loginUser = async () => {
+    const {email, password} = this.state;
+    await axios.post('/api/login', {email, password}).then(res => {
+      this.props.updateUser(res.data);
+    }).catch(err => {
+      console.log(err);
+    })
+    this.props.history.push('/');
+  }
+
+  calculateCalorieIntake = () => {
+    const {height, weight, age, activity_level, gender} = this.state;
+    let mformula = (66 + (6.3 * +weight) + (12.9 * +height) + (6.8 * +age));
+    let fformula = (655 + (4.3 * +weight) + (4.7 * +height) + (4.7 * +age));
+    let calories = 0;
+    if(gender === 'male'){
+      if(+activity_level === 1){
+        calories = +mformula*1.2
+      }
+      if(+activity_level === 2){
+        calories = (+mformula*1.375);
+      }
+      if(+activity_level === 3){
+        calories = mformula*1.55
+      }
+      if(+activity_level === 4){
+        calories = mformula*1.725
+      }
+      if(+activity_level === 5){
+        calories = mformula*1.9
+      }
+    }
+    if(gender === 'female'){
+      if(+activity_level === 1){
+        calories = fformula*1.2
+      }
+      if(+activity_level === 2){
+        calories = fformula*1.375
+      }
+      if(+activity_level === 3){
+        calories = fformula*1.55
+      }
+      if(+activity_level === 4){
+        calories = fformula*1.725
+      }
+      if(+activity_level === 5){
+        calories = fformula*1.9
+      }
+    }
+    this.setState({rec_daily_calorie: Math.round(calories)})
+  }
+  calculateProteinIntake = () => {
+    const {weight} = this.state;
+    this.setState({rec_daily_protein: Math.round((weight/2.20462)*.8)})
+  }
+  calculateCarbIntake = () => {
+    const {rec_daily_calorie} = this.state;
+    this.setState({rec_daily_carb: Math.round((rec_daily_calorie - (rec_daily_calorie*.55))/4)})
+  }
+  calculateFatIntake = () => {
+    const {rec_daily_calorie, rec_daily_carb, rec_daily_protein} = this.state;
+    this.setState({rec_daily_fat: Math.round((rec_daily_calorie - (rec_daily_protein*4) - (rec_daily_carb*4))/9)})
+  }
+  calculateWaterIntake = () => {
+    const {weight, age} = this.state;
+    if(age < 30){
+      this.setState({rec_daily_water: Math.round((((weight/2.2)*40)/28.3)/8)})
+    }
+    if(age < 55){
+      this.setState({rec_daily_water: Math.round((((weight/2.2)*35)/28.3)/8)})
+    }
+    if(age > 55){
+      this.setState({rec_daily_water: Math.round((((weight/2.2)*30)/28.3)/8)})
+    }
+  }
+  
 
   render(){
+    console.log(this.props);
     if(this.props.location.pathname !== "/auth/register"){
     return(
       <div className='auth-container'>
@@ -45,9 +155,9 @@ class Auth extends Component {
           </div>
           <div className='login-inputs'>
             <h2>Login</h2>
-            <input name='emailIn' type='text' placeholder='Email'/>
-            <input name='passwordIn' type='password' placeholder='Password'/>
-            <button onClick={()=>this.props.history.push('/')}>Login</button>
+            <input name='email' value={this.state.email} type='text' placeholder='Email' onChange={(e)=>this.handleInput(e.target.name, e.target.value)}/>
+            <input name='password' value={this.state.password} type='password' placeholder='Password' onChange={(e)=>this.handleInput(e.target.name, e.target.value)}/>
+            <button onClick={()=>this.loginUser()}>Login</button>
           </div>
           <div className='register-button'>
             New here? <i className="fas fa-arrow-right"></i>
@@ -76,21 +186,48 @@ class Auth extends Component {
             <div className={this.state.class}>
               <div className='login-inputs'>
                 <h2>Register</h2>
+                <div className='name-input'>
+                  <input 
+                  name='first_name' 
+                  type='text'
+                  value={this.state.first_name} 
+                  placeholder='First Name'
+                  onChange={(e)=>this.handleInput(e.target.name, e.target.value)}
+                  />
+                  <input 
+                  name='last_name' 
+                  value={this.state.last_name} 
+                  type='text' 
+                  placeholder='Last Name'
+                  onChange={(e)=>this.handleInput(e.target.name, e.target.value)}
+                  />
+
+                </div>
                 <input 
-                  name='emailIn' 
+                  name='email' 
                   type='text' 
                   placeholder='Email'
                   onChange={(e)=>this.handleInput(e.target.name, e.target.value)}
                   />
-                <input name='passwordIn' type='password' placeholder='Password'
+                <input name='password' type='password' placeholder='Password'
                 onChange={(e)=>this.handleInput(e.target.name, e.target.value)}/>
-                <input name='cPasswordIn' type='password' placeholder='Confirm Password'
+                <input name='cpassword' type='password' placeholder='Confirm Password'
                 onChange={(e)=>this.handleInput(e.target.name, e.target.value)}/>
-                <p className='error'></p>
+                <div className='error-container'>
+                  <p className='error hidden'>Email already registered</p>
+                  <p className={this.state.errorClass}><i className="fas fa-exclamation-circle"></i> Passwords do not match</p>
+                </div>
                 
                 <div className='register-button'>
                   <button onClick={() => this.props.history.push('/auth/login')}>Login</button>
-                  <button onClick={() => this.setState({class: 'register-big right'})}>Next</button>
+                  <button onClick={() => {
+                    if(this.state.password !== this.state.cpassword){
+                      this.setState({errorClass: 'error'})
+                      setTimeout(() => this.setState({errorClass: 'error hidden'}), 5000)
+                    } else {
+                      this.setState({class: 'register-big right'})
+                    }
+                    }}>Next</button>
                 </div>
               </div>
               <div className='login-inputs'>
@@ -98,7 +235,7 @@ class Auth extends Component {
                   <h4>Great!</h4>
                   <p>Now we need some information. The information you give us will be used to personalize recommendations.</p>
                 </div>
-                <select name='activityLevel' onChange={(e)=>this.handleInput(e.target.name, e.target.value)}>
+                <select name='activity_level' onChange={(e)=>this.handleInput(e.target.name, e.target.value)}>
                   <option value='0'>Activity Level</option>
                   <option value='1'>Little or No Exercise</option>
                   <option value='2'>Light Exercise 1-3 days/week</option>
@@ -113,22 +250,25 @@ class Auth extends Component {
                 </select>
                 <input 
                   name='height' 
-                  type='text' 
+                  type='number' 
+                  value={this.state.height}
                   placeholder='Height (inches)'
                   onChange={(e)=>this.handleInput(e.target.name, e.target.value)}/>
                 <input 
                   name='weight' 
-                  type='text' 
+                  type='number'
+                  value={this.state.weight} 
                   placeholder='Weight (pounds)'
                   onChange={(e)=>this.handleInput(e.target.name, e.target.value)}/>
                 <input 
                   name='age' 
-                  type='text' 
+                  type='number'
+                  value={this.state.age} 
                   placeholder='Age (years)'
                   onChange={(e)=>this.handleInput(e.target.name, e.target.value)}/>
                 <div className='register-button'>
                   <button onClick={() => this.setState({class: 'register-big'})}>Back</button>
-                  <button>Submit</button>
+                  <button onClick={() => this.registerUser()}>Submit</button>
                 </div>
               </div>
             </div>
@@ -139,4 +279,8 @@ class Auth extends Component {
   }
 }
 
-export default Auth;
+function mapStateToProps(state) {
+  return state;
+}
+
+export default connect(mapStateToProps, {updateUser})(Auth);
