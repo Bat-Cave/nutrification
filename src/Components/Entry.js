@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import {connect} from 'react-redux';
 
 
 class Entry extends Component{
@@ -9,10 +10,13 @@ class Entry extends Component{
     this.state = {
       searchIn: '',
       brandIn: '',
+      servings: 1,
       searchResults: [],
       meal: [],
       today: '',
-      dateDefault: ''
+      time: '', 
+      dateDefault: '',
+      mealName: ''
     }
   }
 
@@ -23,6 +27,11 @@ class Entry extends Component{
   getDate = () => {
     const d = new Date();
     const m = d.getMonth() + +1;
+    let h = d.getHours();
+    if(h > 12){
+      h -= 12;
+    }
+    const min = d.getMinutes();
     const month = () => {
       if(m.toString.length < 2){
         return `0${d.getMonth()+ +1}`
@@ -32,7 +41,7 @@ class Entry extends Component{
     }
     const date = `${month()}/${d.getDate()}/${d.getFullYear()}`;
     const dateDefault = `${d.getFullYear()}-${month()}-${d.getDate()}`
-    this.setState({today: date, dateDefault})
+    this.setState({today: date, dateDefault, time: `${h}:${min}`})
   }
 
   componentDidMount(){
@@ -47,38 +56,231 @@ class Entry extends Component{
         this.setState({searchResults: res.data.foods})
       })
     } else {
-      axios.get(`https://api.nal.usda.gov/fdc/v1/search?api_key=qESsREuVONxc32eM2XaBFLJU5FsTTMc7c0ZZ6f8x&generalSearchInput=${toSearch}`).then(res => {
+      axios.get(`https://api.nal.usda.gov/fdc/v1/search?api_key=qESsREuVONxc32eM2XaBFLJU5FsTTMc7c0ZZ6f8x&generalSearchInput=${toSearch}&sortField=dataType.keyword`).then(res => {
         this.setState({searchResults: res.data.foods})
       })
     }
   }
 
-  addToMeal(id, desc, brand){
+  addToMeal(servings, id, desc, brand){
     const newMeal = this.state.meal;
-    newMeal.push({fdcId: id, description: desc, brandOwner: brand});
-    this.setState({meal: newMeal})
+    newMeal.push({date: this.state.dateDefault, servings, fdcId: id, description: desc, brandOwner: brand});
+    this.setState({meal: newMeal, servings: 1})
+
   }
 
+  addMeal = async () =>{
+    const ids = [];
+    const items = [];
+    const nutrients = {
+      user_id: this.props.id,
+      meal_name: this.state.mealName,
+      entry_date: this.state.dateDefault,
+      entry_time: this.state.time,
+      you_ate: '',
+      biotin: 0,
+      folic_acid: 0,
+      niacin: 0,
+      pantothenic_acid: 0,
+      riboflavin: 0,
+      thiamin: 0,
+      vitamin_a: 0,
+      vitamin_b6: 0,
+      vitamin_b12: 0,
+      vitamin_c: 0,
+      vitamin_d: 0,
+      vitamin_e: 0,
+      vitamin_k: 0,
+      calcium: 0,
+      chloride: 0,
+      chromium: 0,
+      copper: 0,
+      iodine: 0,
+      iron: 0,
+      magnesium: 0,
+      mangenese: 0,
+      molybdenum: 0,
+      phosphorus: 0,
+      potassium: 0,
+      selenium: 0,
+      sodium: 0,
+      zinc: 0,
+      protein: 0,
+      fiber: 0,
+      water: 0,
+      carbohydrates: 0,
+      sugar: 0,
+      fat: 0,
+      calories: 0,
+      alcohol: 0,
+      caffeine: 0
+    }
+    for(let i = 0; i < this.state.meal.length; i++) {
+      ids.push(this.state.meal[i].fdcId)
+    }
+    for(let j = 0; j < ids.length; j++){
+      await axios.get(`https://api.nal.usda.gov/fdc/v1/${ids[j]}?api_key=qESsREuVONxc32eM2XaBFLJU5FsTTMc7c0ZZ6f8x`).then(res => {
+        items.push(res.data)
+      }).catch(err => {
+        console.log(err)
+      })
+    }
+    console.log(items)
+    for(let k = 0; k < items.length; k++){
+      nutrients.you_ate += `| ${items[k].description}`;
+      for(let l = 0; l < items[k].foodNutrients.length; l++){
+          let {rank, name} = items[k].foodNutrients[l].nutrient;
+          let amount = ((items[k].foodNutrients[l].amount*items[k].servingSize)/100) || items[k].foodNutrients[l].amount;
+          if(items[k].foodNutrients[l].nutrient.name.includes('Biotin')){
+            nutrients.biotin += amount*this.state.meal[k].servings;
+          }
+          if(rank === 6900 || rank === 7100 || rank ===7200){
+            nutrients.folic_acid += amount*this.state.meal[k].servings;
+          }
+          if(rank === 6700){
+            nutrients.pantothenic_acid += amount*this.state.meal[k].servings;
+          }
+          if(rank === 6500){
+            nutrients.riboflavin += amount*this.state.meal[k].servings;
+          }
+          if(rank === 6400){
+            nutrients.thiamin += amount*this.state.meal[k].servings;
+          }
+          if(rank === 7420 || rank === 7500){
+            nutrients.vitamin_a += amount*this.state.meal[k].servings;
+          }
+          if(rank === 6800){
+            nutrients.vitamin_b6 += amount*this.state.meal[k].servings;
+          }
+          if(rank === 7300 || rank === 7340){
+            nutrients.vitamin_b12 += amount*this.state.meal[k].servings;
+          }
+          if(rank === 6300){
+            nutrients.vitamin_c += amount*this.state.meal[k].servings;
+          }
+          if(rank === 8650 || rank === 8700){
+            nutrients.vitamin_d += amount*this.state.meal[k].servings;
+          }
+          if(rank === 7905 || rank ===7920){
+            nutrients.vitamin_e += amount*this.state.meal[k].servings;
+          }
+          if(rank === 8800){
+            nutrients.vitamin_k += amount*this.state.meal[k].servings;
+          }
+          if(rank === 5300){
+            nutrients.calcium += amount*this.state.meal[k].servings;
+          }
+          if(name.includes('Chloride')){
+            nutrients.chloride += amount*this.state.meal[k].servings;
+          }
+          if(name.includes('Chromium')){
+            nutrients.chromium += amount*this.state.meal[k].servings;
+          }
+          if(rank === 6000){
+            nutrients.copper += amount*this.state.meal[k].servings;
+          }
+          if(rank === 6150){
+            nutrients.iodine += amount*this.state.meal[k].servings;
+          }
+          if(rank === 5400){
+            nutrients.iron += amount*this.state.meal[k].servings;
+          }
+          if(rank === 5500){
+            nutrients.magnesium += amount*this.state.meal[k].servings;
+          }
+          if(rank === 6100){
+            nutrients.mangenese += amount*this.state.meal[k].servings;
+          }
+          if(name.includes('Molybdenum')){
+            nutrients.molybdenum += amount*this.state.meal[k].servings;
+          }
+          if(rank === 5600){
+            nutrients.phosphorus += amount*this.state.meal[k].servings;
+          }
+          if(rank === 5700){
+            nutrients.potassium += amount*this.state.meal[k].servings;
+          }
+          if(rank === 6200){
+            nutrients.selenium += amount*this.state.meal[k].servings;
+          }
+          if(rank === 5800){
+            nutrients.sodium += amount*this.state.meal[k].servings;
+          }
+          if(rank === 5900){
+            nutrients.zinc += amount*this.state.meal[k].servings;
+          }
+          if(rank === 600){
+            nutrients.protein += amount*this.state.meal[k].servings;
+          }
+          if(rank === 1200){
+            nutrients.fiber += amount*this.state.meal[k].servings;
+          }
+          if(rank === 1100 || rank === 1110){
+            nutrients.carbohydrates += amount*this.state.meal[k].servings;
+          }
+          if(rank === 100){
+            nutrients.water += amount*this.state.meal[k].servings;
+          }
+          if(rank === 1520 || rank === 1510){
+            nutrients.sugar += amount*this.state.meal[k].servings;
+          }
+          if(rank === 800 || rank === 11400 || rank === 12900 || rank === 15400){
+            nutrients.fat += amount*this.state.meal[k].servings;
+          }
+          if(rank === 300){
+            nutrients.calories += amount*this.state.meal[k].servings;
+          }
+          if(rank === 18200){
+            nutrients.alcohol += amount*this.state.meal[k].servings;
+          }
+          if(rank === 18300){
+            nutrients.caffeine += amount*this.state.meal[k].servings;
+          }
+      }
+    }
+    console.log(nutrients)
+    axios.post('/api/addMeal', {nutrients}).then(res => {
+      console.log(`Meal ID: ${res.data}`)
+      console.log(res.data);
+    }).catch(err => {
+      console.log(err)
+    })
+  }
 
   render(){
     const searchResults = this.state.searchResults.map((e, i) => {
+      let brandOwner = '';
+      if(e.brandOwner){
+        brandOwner = e.brandOwner.replace(/(\B)[^ ]*/g,match =>(match.toLowerCase())).replace(/^[^ ]/g,match=>(match.toUpperCase()));
+      } else {
+        brandOwner = '';
+      };
       return(
         <div key={e.fdcId} className='search-result'>
-          <div className='search-column'><button onClick={() => this.addToMeal(e.fdcId, e.description, e.brandOwner)}><i className="fas fa-plus"></i></button></div>
+          <div className='search-column'>
+            <button onClick={() => this.addToMeal(this.state.servings, e.fdcId, e.description, e.brandOwner)}><i className="fas fa-plus"></i></button>
+            <input name='servings' type='number' value={this.state.servings} onChange={e => this.handleInput(e.target.name, e.target.value)}/>
+          </div>
           <div className='search-column f'>{e.fdcId}</div>
-          <div className='search-column'>{e.description}</div>
-          <div className='search-column'>{e.brandOwner}</div>
+          <div className='search-column'>{e.description.replace(/(\B)[^ ]*/g,match =>(match.toLowerCase())).replace(/^[^ ]/g,match=>(match.toUpperCase()))}</div>
+          <div className='search-column'>{brandOwner}</div>
         </div>
       )
     })
 
     const mealItems = this.state.meal.map((e, i) => {
+      let brandOwner = '';
+      if(e.brandOwner){
+        brandOwner = e.brandOwner.replace(/(\B)[^ ]*/g,match =>(match.toLowerCase())).replace(/^[^ ]/g,match=>(match.toUpperCase()));
+      } else {
+        brandOwner = '';
+      };
       return(
-        <div key={e.fdcId} className='search-result'>
-          <div className='search-column'>{this.state.today}</div>
+        <div key={i} className='search-result'>
+          <div className='search-column'>{e.date} - {this.state.time}</div>
           <div className='search-column f'>{e.fdcId}</div>
-          <div className='search-column'>{e.description}</div>
-          <div className='search-column'>{e.brandOwner}</div>
+          <div className='search-column'>{e.servings}: {e.description.replace(/(\B)[^ ]*/g,match =>(match.toLowerCase())).replace(/^[^ ]/g,match=>(match.toUpperCase()))}</div>
+          <div className='search-column'>{brandOwner}</div>
         </div>
       )
     })
@@ -98,7 +300,7 @@ class Entry extends Component{
             </div>
             <div className='search-table'>
               <div className='search-header'>
-                <div className='search-column h'>Add</div>
+                <div className='search-column h'>Servings</div>
                 <div className='search-column f h'>FDC ID</div>
                 <div className='search-column h'>Description</div>
                 <div className='search-column h'>Brand</div>
@@ -114,7 +316,10 @@ class Entry extends Component{
         <div className='entry-section'>
           <div className='search-top'>
             <h3>Meal</h3>
-            <input name='mealName' type='text' placeholder='Meal Name...'/>
+            <div className='add-meal'>
+              <button onClick={() => this.addMeal()}>Add Meal</button>
+              <input name='mealName' type='text' onChange={(e)=> this.handleInput(e.target.name, e.target.value)} placeholder='Meal Name...'/>
+            </div>
           </div>
           <div className='search-header'>
             <div className='search-column h'>Date</div>
@@ -130,4 +335,8 @@ class Entry extends Component{
     )
   }
 }
-export default Entry;
+function mapStateToProps(state) {
+  return state;
+}
+
+export default connect(mapStateToProps, null)(Entry);

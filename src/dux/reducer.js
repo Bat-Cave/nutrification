@@ -38,7 +38,7 @@ export default function reducer(state = initialState, action){
         rec_daily_protein: payload.rec_daily_protein,
         rec_daily_carb: payload.rec_daily_carb,
         rec_daily_fat: payload.rec_daily_fat,
-        rec_daily_water: payload.first_name        
+        rec_daily_water: payload.rec_daily_water        
       }
 
     default:

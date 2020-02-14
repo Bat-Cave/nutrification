@@ -1,4 +1,5 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
 const Dashboard = (props) => {
   console.log(props);
@@ -12,11 +13,11 @@ const Dashboard = (props) => {
         <div className='recommendations'>
           <p>Based on your information, you need:</p>
           <ul>
-            <li><span className='rec-span'>{'{Water}'}</span> cups of Water</li>
-            <li><span className='rec-span'>{'{Calories}'}</span> Calories</li>
-            <li><span className='rec-span'>{'{Protein}'}</span> grams of Protein</li>
-            <li><span className='rec-span'>{'{Carbs}'}</span> grams of Carbohydrates</li>
-            <li><span className='rec-span'>{'{Fat}'}</span> grams of Fat</li>
+            <li><span className='rec-span'>{props.rec_daily_water || '{Water}'}</span> cups of Water</li>
+            <li><span className='rec-span'>{props.rec_daily_calorie || '{Calories}'}</span> Calories</li>
+            <li><span className='rec-span'>{props.rec_daily_protein || '{Protein}'}</span> grams of Protein</li>
+            <li><span className='rec-span'>{props.rec_daily_carb || '{Carbs}'}</span> grams of Carbohydrates</li>
+            <li><span className='rec-span'>{props.rec_daily_fat || '{Fat}'}</span> grams of Fat</li>
           </ul>
         </div>
       </div>
@@ -63,4 +64,8 @@ const Dashboard = (props) => {
   )
 }
 
-export default Dashboard;
+function mapStateToProps(state) {
+  return state;
+}
+
+export default connect(mapStateToProps, null)(Dashboard);

@@ -10,7 +10,6 @@ class Nav extends Component{
   
   getMe = () => {
     axios.get('/api/me').then(res => {
-      console.log(res.data)
       this.props.updateUser(res.data)
     }).catch(err => {
       console.log(err);
@@ -18,9 +17,11 @@ class Nav extends Component{
     })
   }
   
+  componentDidMount(){
+    this.getMe();
+  }
+
   componentDidUpdate(){
-    console.log(this.props)
-    this.getMe()
   }
   
   
@@ -52,4 +53,9 @@ class Nav extends Component{
   }
 }
 
-export default withRouter(connect(null, {updateUser})(Nav));
+function mapStateToProps(state) {
+  return state;
+}
+
+
+export default withRouter(connect(mapStateToProps, {updateUser})(Nav));

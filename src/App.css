@@ -88,7 +88,7 @@ body{
   width: 65%;
   height: 100%;
   margin-left: 8px;
-  padding: 32px;
+  padding: 64px 32px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -249,6 +249,24 @@ body{
   height: 50px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.add-meal {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-meal input{
+  width: 50%;
+  height: 35px;
+  padding: 0 12px;
+  border: none;
+  text-align: left;
+  border-bottom: 2px solid orange;
+  outline: none;
 }
 
 .search-top input{
@@ -290,7 +308,8 @@ body{
 }
 
 .search-result{
-  height: 30px;
+  min-height: 30px;
+  height: auto;
   width: 100%;
   display: flex;
 }
@@ -301,7 +320,7 @@ body{
 
 .search-column{
   width: 30%;
-  height: 30px;
+  min-height: 30px;
   border-right: 1px solid black;
   color: black;
   text-align: center;
@@ -309,6 +328,26 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.search-column input {
+  width: 20%;
+  height: 24px;
+  margin: 4px;
+}
+
+.search-column button {
+  width: 20%;
+  height: 24px;
+  margin: 4px;
+}
+
+.search-column button:hover {
+  width: 25%;
+  height: 25px;
+  border: none;
+  background: rgba(255, 166, 0, 0.75);
+  letter-spacing: 3px;
 }
 
 .f {

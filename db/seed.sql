@@ -31,6 +31,7 @@ create table nutrition_history (
     meal_name varchar(100),
     entry_date varchar(12),
     entry_time varchar(20),
+    you_ate text,
     biotin varchar(100),
     folate_folic_acid varchar(100),
     niacin varchar(100),
@@ -61,5 +62,10 @@ create table nutrition_history (
     protein varchar(100),
     fiber varchar(100),
     water varchar(100),
-    carbohydrates varchar(100)
+    carbohydrates varchar(100),
+    sugar varchar(100),
+    fat varchar(100),
+    calories varchar(100),
+    alcohol varchar(100),
+    caffeine varchar(100)
 );

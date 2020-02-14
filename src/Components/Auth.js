@@ -31,7 +31,6 @@ class Auth extends Component {
   }
 
   handleInput = (name, val) => {
-    console.log(`${name}: ${val}`)
     this.setState({[name]: val})
   }
 
@@ -134,7 +133,6 @@ class Auth extends Component {
   
 
   render(){
-    console.log(this.props);
     if(this.props.location.pathname !== "/auth/register"){
     return(
       <div className='auth-container'>
