@@ -10,7 +10,9 @@ class Auth extends Component {
 
     this.state = {
       class: 'register-big',
+      loginError: 'error hidden',
       errorClass: 'error hidden',
+      defaultProfilePic: ['https://nutrification.s3-us-west-1.amazonaws.com/apple.png', 'https://nutrification.s3-us-west-1.amazonaws.com/carrot.png', 'https://nutrification.s3-us-west-1.amazonaws.com/lemon.png', 'https://nutrification.s3-us-west-1.amazonaws.com/pepper.png'],
       first_name: '',
       last_name: '',
       email: '',
@@ -41,9 +43,12 @@ class Auth extends Component {
     await this.calculateFatIntake();
     await this.calculateWaterIntake();
     
-    const {first_name, last_name, email, password, activity_level, height, weight, age, gender, rec_daily_calorie, rec_daily_protein, rec_daily_carb, rec_daily_fat, rec_daily_water} = this.state;
+    const {first_name, last_name, email, password, defaultProfilePic, activity_level, height, weight, age, gender, rec_daily_calorie, rec_daily_protein, rec_daily_carb, rec_daily_fat, rec_daily_water} = this.state;
 
-    axios.post('/api/register', {first_name, last_name, email, password, height, weight, age, activity_level, gender, rec_daily_calorie, rec_daily_protein, rec_daily_carb, rec_daily_fat, rec_daily_water}).then(res => {
+    let index = Math.floor(Math.random() * 4);
+    let profile_pic = defaultProfilePic[index];
+
+    axios.post('/api/register', {first_name, last_name, email, password, profile_pic, height, weight, age, activity_level, gender, rec_daily_calorie, rec_daily_protein, rec_daily_carb, rec_daily_fat, rec_daily_water}).then(res => {
       this.props.updateUser(res.data);
     }).catch(err => {
       console.log(err);
@@ -59,10 +64,16 @@ class Auth extends Component {
     const {email, password} = this.state;
     await axios.post('/api/login', {email, password}).then(res => {
       this.props.updateUser(res.data);
+      setTimeout(() => {this.props.history.push('/')}, 2000);
     }).catch(err => {
-      console.log(err);
+      if(err){
+        this.setState({loginError: 'error'})
+        setTimeout(() => this.setState({loginError: 'error hidden'}), 5000)
+      }
+      else {
+        console.log('false')
+      }
     })
-    this.props.history.push('/');
   }
 
   calculateCalorieIntake = () => {
@@ -154,6 +165,7 @@ class Auth extends Component {
             <h2>Login</h2>
             <input name='email' value={this.state.email} type='text' placeholder='Email' onChange={(e)=>this.handleInput(e.target.name, e.target.value)}/>
             <input name='password' value={this.state.password} type='password' placeholder='Password' onChange={(e)=>this.handleInput(e.target.name, e.target.value)}/>
+            <p className={this.state.loginError}><i className="fas fa-exclamation-circle"></i> Email and password combination not found.</p>
             <button onClick={()=>this.loginUser()}>Login</button>
           </div>
           <div className='register-button'>

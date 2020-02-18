@@ -16,7 +16,8 @@ class Entry extends Component{
       today: '',
       time: '', 
       dateDefault: '',
-      mealName: ''
+      mealName: '',
+      containerClass: 'container'
     }
   }
 
@@ -46,6 +47,9 @@ class Entry extends Component{
 
   componentDidMount(){
     this.getDate();
+    setTimeout(() => {
+      this.setState({containerClass: 'container left'})
+    }, 1000);
   }
 
   search = () =>{
@@ -72,10 +76,14 @@ class Entry extends Component{
   addMeal = async () =>{
     const ids = [];
     const items = [];
+    const convertedDate = this.state.dateDefault.split('-');
+    let year = convertedDate[0];
+    convertedDate[3] = year;
+    convertedDate.shift();
     const nutrients = {
       user_id: this.props.id,
       meal_name: this.state.mealName,
-      entry_date: this.state.dateDefault,
+      entry_date: convertedDate.join('/'),
       entry_time: this.state.time,
       you_ate: '',
       biotin: 0,
@@ -129,7 +137,7 @@ class Entry extends Component{
     for(let k = 0; k < items.length; k++){
       nutrients.you_ate += `| ${items[k].description}`;
       for(let l = 0; l < items[k].foodNutrients.length; l++){
-          let {rank, name} = items[k].foodNutrients[l].nutrient;
+          let {rank, name, unitName} = items[k].foodNutrients[l].nutrient;
           let amount = ((items[k].foodNutrients[l].amount*items[k].servingSize)/100) || items[k].foodNutrients[l].amount;
           if(items[k].foodNutrients[l].nutrient.name.includes('Biotin')){
             nutrients.biotin += amount*this.state.meal[k].servings;
@@ -138,76 +146,147 @@ class Entry extends Component{
             nutrients.folic_acid += amount*this.state.meal[k].servings;
           }
           if(rank === 6700){
-            nutrients.pantothenic_acid += amount*this.state.meal[k].servings;
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.pantothenic_acid += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.pantothenic_acid += amount*this.state.meal[k].servings;
+            }
+          }
+          if(rank === 6600){
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.niacin += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.niacin += amount*this.state.meal[k].servings;
+            }
           }
           if(rank === 6500){
-            nutrients.riboflavin += amount*this.state.meal[k].servings;
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.riboflavin += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.riboflavin += amount*this.state.meal[k].servings;
+            }
           }
           if(rank === 6400){
-            nutrients.thiamin += amount*this.state.meal[k].servings;
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.thiamin += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.thiamin += amount*this.state.meal[k].servings;
+            }
           }
           if(rank === 7420 || rank === 7500){
             nutrients.vitamin_a += amount*this.state.meal[k].servings;
           }
           if(rank === 6800){
-            nutrients.vitamin_b6 += amount*this.state.meal[k].servings;
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.vitamin_b6 += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.vitamin_b6 += amount*this.state.meal[k].servings;
+            }
           }
           if(rank === 7300 || rank === 7340){
             nutrients.vitamin_b12 += amount*this.state.meal[k].servings;
           }
           if(rank === 6300){
-            nutrients.vitamin_c += amount*this.state.meal[k].servings;
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.vitamin_c += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.vitamin_c += amount*this.state.meal[k].servings;
+            }
           }
           if(rank === 8650 || rank === 8700){
             nutrients.vitamin_d += amount*this.state.meal[k].servings;
           }
           if(rank === 7905 || rank ===7920){
-            nutrients.vitamin_e += amount*this.state.meal[k].servings;
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.vitamin_e += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.vitamin_e += amount*this.state.meal[k].servings;
+            }
           }
           if(rank === 8800){
             nutrients.vitamin_k += amount*this.state.meal[k].servings;
           }
           if(rank === 5300){
-            nutrients.calcium += amount*this.state.meal[k].servings;
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.calcium += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.calcium += amount*this.state.meal[k].servings;
+            }
           }
           if(name.includes('Chloride')){
-            nutrients.chloride += amount*this.state.meal[k].servings;
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.chloride += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.chloride += amount*this.state.meal[k].servings;
+            }
           }
           if(name.includes('Chromium')){
             nutrients.chromium += amount*this.state.meal[k].servings;
           }
           if(rank === 6000){
-            nutrients.copper += amount*this.state.meal[k].servings;
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.copper += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.copper += amount*this.state.meal[k].servings;
+            }
           }
           if(rank === 6150){
             nutrients.iodine += amount*this.state.meal[k].servings;
           }
           if(rank === 5400){
-            nutrients.iron += amount*this.state.meal[k].servings;
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.iron += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.iron += amount*this.state.meal[k].servings;
+            }
           }
           if(rank === 5500){
-            nutrients.magnesium += amount*this.state.meal[k].servings;
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.magnesium += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.magnesium += amount*this.state.meal[k].servings;
+            }
           }
           if(rank === 6100){
-            nutrients.mangenese += amount*this.state.meal[k].servings;
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.mangenese += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.mangenese += amount*this.state.meal[k].servings;
+            }
           }
           if(name.includes('Molybdenum')){
             nutrients.molybdenum += amount*this.state.meal[k].servings;
           }
           if(rank === 5600){
-            nutrients.phosphorus += amount*this.state.meal[k].servings;
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.phosphorus += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.phosphorus += amount*this.state.meal[k].servings;
+            }
           }
           if(rank === 5700){
-            nutrients.potassium += amount*this.state.meal[k].servings;
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.potassium += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.potassium += amount*this.state.meal[k].servings;
+            }
           }
           if(rank === 6200){
             nutrients.selenium += amount*this.state.meal[k].servings;
           }
           if(rank === 5800){
-            nutrients.sodium += amount*this.state.meal[k].servings;
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.sodium += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.sodium += amount*this.state.meal[k].servings;
+            }
           }
           if(rank === 5900){
-            nutrients.zinc += amount*this.state.meal[k].servings;
+            if(unitName === 'mcg' || unitName === 'µg'){
+              nutrients.zinc += (amount/1000)*this.state.meal[k].servings;
+            } else{
+              nutrients.zinc += amount*this.state.meal[k].servings;
+            }
           }
           if(rank === 600){
             nutrients.protein += amount*this.state.meal[k].servings;
@@ -286,7 +365,7 @@ class Entry extends Component{
     })
 
     return(
-      <div className='container'>
+      <div className={this.state.containerClass}>
         <h1>NEW ENTRY</h1>
         <div className='entry-section'>
           <div className='date-input'>

@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express'),
       massive = require('massive'),
       cors = require('cors'),
+      aws = require('aws-sdk'),
       session = require('express-session'),
       {SERVER_PORT, SESSION_SECRET, CONNECTION_STRING} = process.env,
       port = SERVER_PORT,
@@ -23,6 +24,9 @@ app.post('/api/login', ctrl.login)
 app.get('/api/me', ctrl.getMe)
 app.post('/api/profile/image', ctrl.updateProfilePicture)
 app.post('/api/addMeal', ctrl.addMeal)
+app.get('/api/userHistory/:id', ctrl.getUserHistory)
+app.get('/sign-s3', ctrl.s3Upload)
+app.get('/api/recommended', ctrl.getRecommended)
 
 
 massive(CONNECTION_STRING).then(db => {

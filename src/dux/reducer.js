@@ -3,6 +3,7 @@ const initialState = {
   first_name: '',
   last_name: '',
   email: '',
+  profile_pic: '',
   activity_level: '',
   height: '',
   weight: '',
@@ -18,6 +19,7 @@ const initialState = {
 
 
 const UPDATE_USER = 'UPDATE_USER';
+const UPDATE_PROFILE = 'UPDATE_PROFILE';
 
 export default function reducer(state = initialState, action){
   const {type, payload} = action;
@@ -30,6 +32,7 @@ export default function reducer(state = initialState, action){
         last_name: payload.last_name,
         email: payload.email,
         activity_level: payload.activity_level,
+        profile_pic: payload.profile_pic,
         height: payload.height,
         weight: payload.weight,
         age: payload.age,
@@ -40,7 +43,11 @@ export default function reducer(state = initialState, action){
         rec_daily_fat: payload.rec_daily_fat,
         rec_daily_water: payload.rec_daily_water        
       }
-
+      case UPDATE_PROFILE:
+        return {
+          ...state,
+          profile_pic: payload.profile_pic        
+        }
     default:
       return state;
   }
@@ -50,5 +57,12 @@ export function updateUser(user) {
   return {
     type: UPDATE_USER,
     payload: user
+  }
+}
+
+export function updatePic(pic) {
+  return {
+    type: UPDATE_PROFILE,
+    payload: pic
   }
 }

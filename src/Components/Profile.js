@@ -1,74 +1,103 @@
 import React from 'react';
-import { uploadFile } from 'react-s3';
 import axios from 'axios';
+import {connect} from 'react-redux';
+import {updatePic} from '../dux/reducer';
 
+const uploadFile = (file, signedRequest, id) => {
+  const options = {
+    headers: {
+      'Content-Type': file.type,
+    },
+  };
 
-const config = {
-  bucketName: 'nutrification',
-  dirName: 'images',
-  region: 'us-west-1',
-  accessKeyId: 'AKIAJD6BEFPJUNSBAR5Q',
-  secretAccessKey: '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',
-}
-
-let profile = '';
-
-const upload = (e) =>{
-  let file = e.target.files[0];
-  let name = 'user/' + file.name;
-  file = {...file, name: name};
-  uploadFile( file, config)
-  .then( (data) => {
-    profile = data.location
-    console.log(profile);
-    axios.post('/api/profile/image').then(res => {
-      console.log('Updated Profile Picture')
-    }).catch(err => {
-      console.log(err)
+  axios
+    .put(signedRequest, file, options)
+    .then(response => {
+      let file = response.config.data.name;
+      let baseUrl = 'https://nutrification.s3.us-west-1.amazonaws.com/nutrification-profile-'
+      let url = (`${baseUrl}${file}`)
+      axios.post('/api/profile/image', {url, id}).then(res => {
+        console.log('success')
+        updatePic(url);
+      }).catch(err => {
+        console.log(err)
+      })
     })
-  })
-  .catch( (err) => {
-    alert(err);
+    .catch(err => {
+      if (err.response.status === 403) {
+        alert(
+          `Your request for a signed URL failed with a status 403. Double check the CORS configuration and bucket policy in the README. You also will want to double check your AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in your .env and ensure that they are the same as the ones that you created in the IAM dashboard. You may need to generate new keys\n${err.stack}`
+        );
+      } else {
+        alert(`ERROR: ${err.status}\n ${err.stack}`);
+      }
+    });
+};
+
+
+
+const getSignedRequest = ([file], id) => {
+  console.log(file);
+
+  const fileName = `nutrification-profile-${file.name.replace(/\s/g, '-')}`
+
+  axios.get('/sign-s3', {
+    params: {
+      'file-name': fileName,
+      'file-type': file.type
+    }
+  }).then( (response) => {
+    const { signedRequest} = response.data 
+    uploadFile(file, signedRequest, id)
+  }).catch( err => {
+    console.log(err)
   })
 }
 
 
 const Profile = (props) => {
+  console.log(props)
   return(
     <div className='container'>
       <h1>PROFILE</h1>
       <div className='prof-top'>
-          <h2>{'{User_First}'}{'{User_Last}'}</h2>
+          <h2>{props.first_name} {props.last_name}</h2>
           <div className='prof-image'>
-            <img src={profile || 'https://static.scrum.org/web/images/profile-placeholder.png'} alt='profile'/>
-            <input type='file' onChange={upload}/>
+            <img src={props.profile_pic || 'https://static.scrum.org/web/images/profile-placeholder.png'} alt='profile'/>
+            <input type='file' onChange={(e) => getSignedRequest(e.target.files, props.id)}/>
           </div>
       </div>
       <div className='prof-bottom'>
         <div className='profile-info'>
           <div className='profile-row'>
-            <h4>Height</h4>
-            <input type='text' />
+            <h4>Email:</h4>
+            <p>{props.email}</p>
+            {/* <input type='text'/> */}
           </div>
           <div className='profile-row'>
-            <h4>Weight</h4>
-            <input type='text' />
+            <h4>Height:</h4>
+            <p>{`${props.height} inches`}</p>
+            {/* <input type='text'/> */}
           </div>
           <div className='profile-row'>
-            <h4>Gender</h4>
-            <input type='text' />
+            <h4>Weight:</h4>
+            <p>{`${props.weight} pounds`}</p>
+            {/* <input type='text' /> */}
           </div>
           <div className='profile-row'>
-            <h4>Age</h4>
-            <input type='text' />
+            <h4>Gender:</h4>
+            <p>{props.gender}</p>
+            {/* <input type='text' /> */}
           </div>
           <div className='profile-row'>
-            <h4>Activity Level</h4>
-            <input type='text' />
+            <h4>Age:</h4>
+            <p>{props.age}</p>
+            {/* <input type='text' /> */}
           </div>
           <div className='profile-row'>
-            <h4>{profile.toString()}</h4>
-            <input type='text' />
+            <h4>Activity Level:</h4>
+            <p>{props.activity_level}</p>
+            {/* <input type='text' /> */}
           </div>
         </div>
       </div>
@@ -76,4 +105,8 @@ const Profile = (props) => {
   )
 }
 
-export default Profile;
+function mapStateToProps(state) {
+  return state;
+}
+
+export default connect(mapStateToProps, {updatePic})(Profile);

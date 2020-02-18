@@ -45,6 +45,8 @@ body{
   width: 60%;
   height: 60%;
   border-radius: 50%;
+  box-shadow: 0 0 8px 4px rgb(77, 77, 77);
+  object-fit: cover;
 }
 
 .nav-bottom{
@@ -60,10 +62,14 @@ body{
   background: white;
   margin-left: 200px;
   padding: 24px 10%;
+  overflow-x: hidden;
+  transition: all 1s ease;
 }
+
 
 .container h1{
   position: absolute;
+
 }
 
 .dash-top{
@@ -100,16 +106,72 @@ body{
   width: 80px;
 }
 
+.dash-middle{
+  width: 100%;
+  height: auto;
+  margin: 16px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.stat-container{
+  width: 200px;
+  height: 100px;
+  margin: 16px 8px;;
+  padding: 16px;
+  box-shadow: 0 0 8px 4px rgb(77, 77, 77);
+  overflow: hidden;
+}
+
+.bar{
+  width: 100%;
+  height: 50%;
+  padding: 8px;
+}
+
+.bar p{
+  transition: all 1s ease;
+}
+
+.consumed{
+  height: 100%;
+  background: rebeccapurple
+}
+
+.recommended {
+  height: 100%;
+  width: 100%;
+  background: lightblue
+}
+
 .dash-bottom{
   min-height: 60%;
   width: 100%;
-  overflow-x: scroll;
+  overflow: scroll;
   background: rgba(200, 200, 200, 0.75);
 }
 
 .table-header{
   width: auto;
   height: 100%;
+  display: flex;
+}
+
+.table{
+  width: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-row:nth-of-type(2n+1) div{
+  background: white;
+}
+
+.table-row{
+  width: auto;
+  height: auto;
   display: flex;
 }
 
@@ -120,7 +182,7 @@ body{
   flex-shrink: 0;
   padding: 0 8px;
   width: 100px;
-  height: 40px;
+  min-height: 40px;
   border-right: 1px solid white;
   border-bottom: 4px solid white;
   background: black;
@@ -161,7 +223,28 @@ body{
 }
 
 .s{
-  width: 50px;
+  width: 20px;
+  border: none;
+  background: transparent;
+}
+
+.th{
+  color: black;
+  background: transparent;
+  border-right: 1px solid black;
+  border-bottom: 4px solid transparent;
+}
+
+.you-ate{
+  color: black;
+  background: transparent;
+  border-right: 1px solid black;
+  border-bottom: 4px solid transparent;
+  width: 150px;
+}
+
+.you-ate-column{
+  width: 150px;
 }
 
 .column p {
@@ -189,6 +272,8 @@ body{
   height: 200px;
   width: auto;
   border-radius: 50%;
+  box-shadow: 0 0 8px 4px rgb(77, 77, 77);
+  object-fit: cover;
 }
 
 .prof-bottom{
@@ -209,6 +294,11 @@ body{
 .profile-row{
   display: flex;
   justify-content: space-between;
+}
+
+.profile-row p{
+  width: 50%;
+  text-align: left;
 }
 
 .history-table{
@@ -409,6 +499,14 @@ body{
   align-items: center;
   width: 100%;
   margin-top: 40%;
+}
+
+.login-inputs p{
+  margin-top: 50px;
+}
+
+.login-inputs button{
+  margin-top: 20px;
 }
 
 .login-inputs input {
