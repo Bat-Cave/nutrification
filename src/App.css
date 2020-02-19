@@ -14,12 +14,44 @@ body{
   width: 200px;
   height: 100vh;
   padding: 10px;
+  padding-bottom: 96px;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   justify-content: space-between;
-  box-shadow: 0 0 16px 8px rgb(77, 77, 77);
+  box-shadow: -2px -2px 8px rgba(255, 255, 255, 1),
+              -2px -2px 12px rgba(185, 185, 185, 0.5),
+              inset 2px 2px 4px rgba(141, 141, 141, 0.1),
+              2px 2px 8px rgba(0, 0, 0, .15);
   position: fixed;
+  transition: all .5s ease;
   z-index: 100;
+}
+
+.move_left{
+  transform: translateX(-155px);
+}
+
+.rotate{
+  transform: rotate(900deg)
+}
+
+.nav-container-span{
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  align-self: flex-end;
+  box-shadow: -2px -2px 8px rgba(255, 255, 255, 1),
+              -2px -2px 12px rgba(185, 185, 185, 0.5),
+              inset 2px 2px 4px rgba(141, 141, 141, 0.1),
+              2px 2px 8px rgba(0, 0, 0, .15);
+  display: flex;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  margin-right: -8x;
+  cursor: pointer;
+  transition: all .5s ease;
 }
 
 .nav-top{
@@ -33,8 +65,8 @@ body{
 }
 
 .profile_pic_container{
-  width: 180px;
-  height: 180px;
+  width: 170px;
+  height: 170px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -42,15 +74,18 @@ body{
 }
 
 .profile_pic_container img {
-  width: 60%;
-  height: 60%;
+  width: 55%;
+  height: 55%;
   border-radius: 50%;
-  box-shadow: 0 0 8px 4px rgb(77, 77, 77);
+  box-shadow: -2px -2px 8px rgba(255, 255, 255, 1),
+              -2px -2px 12px rgba(185, 185, 185, 0.5),
+              inset 2px 2px 4px rgba(141, 141, 141, 0.1),
+              2px 2px 8px rgba(0, 0, 0, .15);
   object-fit: cover;
 }
 
 .nav-bottom{
-  height: 100px;
+  height: auto;
   display: flex;
   justify-content: flex-start;
   padding: 0 20px;
@@ -60,27 +95,40 @@ body{
   width: calc(100vw - 208px);
   height: 100vh;
   background: white;
-  margin-left: 200px;
+  margin-left: 208px;
   padding: 24px 10%;
   overflow-x: hidden;
-  transition: all 1s ease;
+  transition: all .5s ease;
 }
 
+.nav-closed-container{
+  width: calc(100vw - 53px);
+  margin-left: 53px;
+  padding: 24px 10%;
+}
 
 .container h1{
-  position: absolute;
-
+  position: relative;
+  width: calc(100%);
+  height: 50px;
+  line-height: 50px;
+  background: white;
+  margin-bottom: 10px;
 }
 
 .dash-top{
-  height: 40%;
+  height: 20%;
   width: 100%;
   display: flex;
-  padding: 16px 0;
+  padding: 8px 0;
+  box-shadow: -2px -2px 8px rgba(255, 255, 255, 1),
+              -2px -2px 12px rgba(185, 185, 185, 0.5),
+              inset 2px 2px 4px rgba(141, 141, 141, 0.1),
+              2px 2px 8px rgba(0, 0, 0, .15);
 }
 
 .welcome-container{
-  width: 35%;
+  width: 50%;
   height: 100%;
   margin-right: 8px;
   display: flex;
@@ -91,19 +139,19 @@ body{
 
 
 .recommendations{
-  width: 65%;
-  height: 100%;
+  width: 100%;
+  height: 80%;
   margin-left: 8px;
-  padding: 64px 32px;
+  padding: 4px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-evenly;
   
 }
 
 .rec-span{
   display: inline-block;
-  width: 80px;
+  width: auto;
 }
 
 .dash-middle{
@@ -112,44 +160,74 @@ body{
   margin: 16px 0;
   display: flex;
   flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.today-stats{
+  display: flex;
+  width: 100%;
+  height: auto;
+  margin: 16px 0;
+  flex-wrap: wrap;
   justify-content: space-between;
 }
 
 .stat-container{
   width: 200px;
   height: 100px;
-  margin: 16px 8px;;
+  margin: 16px 4px;;
   padding: 16px;
-  box-shadow: 0 0 8px 4px rgb(77, 77, 77);
+  box-shadow: -2px -2px 8px rgba(255, 255, 255, 1),
+              -2px -2px 12px rgba(185, 185, 185, 0.5),
+              inset 2px 2px 4px rgba(141, 141, 141, 0.1),
+              2px 2px 8px rgba(0, 0, 0, .15);
   overflow: hidden;
 }
 
 .bar{
   width: 100%;
-  height: 50%;
-  padding: 8px;
+  height: 40%;
+  padding: 4px;
 }
 
 .bar p{
-  transition: all 1s ease;
+  transition: all .125s ease;
+  line-height: 100%;
+  text-align: center;
 }
 
 .consumed{
   height: 100%;
-  background: rebeccapurple
+  background: orange;
+  transition: all .125s ease;
 }
 
 .recommended {
   height: 100%;
   width: 100%;
-  background: lightblue
+  background: green;
+  color: white;
+  animation: grow .5s;
+}
+
+.p-span{
+  position: sticky;
+  display: block;
+  width: 160px;
+  text-align: center;
 }
 
 .dash-bottom{
   min-height: 60%;
-  width: 100%;
-  overflow: scroll;
-  background: rgba(200, 200, 200, 0.75);
+  min-width: 100%;
+  width: auto;
+  overflow-x: auto;
+  box-shadow: -2px -2px 8px rgba(255, 255, 255, 1),
+              -2px -2px 12px rgba(185, 185, 185, 0.5),
+              inset 2px 2px 4px rgba(141, 141, 141, 0.1),
+              2px 2px 8px rgba(0, 0, 0, .15);
+  background: rgba(255, 166, 0, 0.25);
 }
 
 .table-header{
@@ -165,14 +243,19 @@ body{
   flex-direction: column;
 }
 
-.table-row:nth-of-type(2n+1) div{
-  background: white;
-}
-
 .table-row{
   width: auto;
   height: auto;
   display: flex;
+  transition: all .25s ease;
+}
+
+.table-row:nth-of-type(2n+1) .column{
+  background-color: rgba(255, 166, 0, 0.375);
+}
+
+.table-row:hover .column{
+  background-color: white;
 }
 
 .column{
@@ -187,7 +270,8 @@ body{
   border-bottom: 4px solid white;
   background: black;
   color: white;
-  text-align: center
+  text-align: center;
+  transition: all .125s ease;
 }
 
 .date {
@@ -272,7 +356,10 @@ body{
   height: 200px;
   width: auto;
   border-radius: 50%;
-  box-shadow: 0 0 8px 4px rgb(77, 77, 77);
+  box-shadow: -2px -2px 8px rgba(255, 255, 255, 1),
+              -2px -2px 12px rgba(185, 185, 185, 0.5),
+              inset 2px 2px 4px rgba(141, 141, 141, 0.1),
+              2px 2px 8px rgba(0, 0, 0, .15);
   object-fit: cover;
 }
 
@@ -310,7 +397,7 @@ body{
 }
 
 .entry-section{
-  height: 50%;
+  height: calc(50% - 60px);
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -349,14 +436,8 @@ body{
   align-items: center;
 }
 
-.add-meal input{
-  width: 50%;
-  height: 35px;
-  padding: 0 12px;
-  border: none;
-  text-align: left;
-  border-bottom: 2px solid orange;
-  outline: none;
+#stupid-input{
+  align-self: flex-end;
 }
 
 .search-top input{
@@ -371,7 +452,8 @@ body{
 
 .search-table{
   width: 100%;
-  height: calc(100% - 50px);
+  height: calc(100%);
+  border: 1px solid black;
 }
 
 .search-header{
@@ -388,13 +470,26 @@ body{
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  border: 1px solid black;
 }
 
 .search-results{
-  height: calc(100% - 50px);
+  height: calc(100% - 15px);
   width: 100%;
   box-shadow: inset 0 0 4px 4px rgba(65, 65, 65, 0.5);
   overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-results .div{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 12px;
+  color: grey;
+  height: calc(100%);
 }
 
 .search-result{
@@ -426,7 +521,19 @@ body{
   margin: 4px;
 }
 
+.search-column p {
+  background: green;
+  color: white;
+  width: 20%;
+  height: 24px;
+  line-height: 24px;
+  margin: 4px;
+  letter-spacing: 3px;
+  font-weight: bolder;
+}
+
 .search-column button {
+  color: white;
   width: 20%;
   height: 24px;
   margin: 4px;
@@ -448,6 +555,10 @@ body{
   background: black;
   color: white;
   border-bottom: 4px solid orange;
+}
+
+.g{
+  border-bottom: 4px solid green;
 }
 
 .r {
@@ -472,7 +583,10 @@ body{
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  box-shadow: 0 0 16px 8px rgb(77, 77, 77);
+  box-shadow: -2px -2px 8px rgba(255, 255, 255, 1),
+              -2px -2px 12px rgba(185, 185, 185, 0.5),
+              inset 2px 2px 4px rgba(141, 141, 141, 0.1),
+              2px 2px 8px rgba(0, 0, 0, .15);
   overflow: hidden;
   animation: fade-in 1s;
 }
@@ -571,6 +685,19 @@ body{
   align-items: center;
 }
 
+.register-button a{
+  text-decoration: none;
+  margin-bottom: 8px;
+  background: white;
+  border-radius: 16px;
+  transition: .125s all ease;
+  padding: 4px 8px;
+  letter-spacing: 2px;
+  display: flex;
+  justify-content: center;
+  box-shadow: none;
+}
+
 .register-big{
   width: calc(100% + 100%);
   display: flex;
@@ -594,10 +721,18 @@ body{
 a{
   text-decoration: none;
   margin-bottom: 8px;
+  background: white;
+  border-radius: 16px;
   color: green;
-  transition: .25s all ease;
+  transition: .125s all ease;
+  padding: 4px 8px;
+  letter-spacing: 2px;
   display: flex;
   justify-content: center;
+  box-shadow: -2px -2px 8px rgba(255, 255, 255, 1),
+              -2px -2px 12px rgba(185, 185, 185, 0.5),
+              inset 2px 2px 4px rgba(141, 141, 141, 0.1),
+              2px 2px 8px rgba(0, 0, 0, .15);
 }
 
 a:nth-of-type(2n + 1){
@@ -612,9 +747,18 @@ a:nth-of-type(2n + 1):visited{
   color: orange;
 }
 
-a:hover{
-  letter-spacing: 3px;
+a:hover, .nav-container-span:hover{
+  transform: scale(1.05);
 }
+
+a:active, .nav-container-span:active{
+  transform: scale(.98);
+  box-shadow: inset -2px -2px 8px rgba(255, 255, 255, 1),
+              inset -2px -2px 12px rgba(255, 255, 255, .5),
+              inset 2px 2px 4px rgba(255, 255, 255, .1),
+              inset 2px 2px 8px rgba(0, 0, 0, .15);
+}
+
 
 button {
   width: 100px;
@@ -642,10 +786,15 @@ h2 {
 
 ul{
   list-style-position: inside;
+  list-style-type: none;
 }
 
 select{
   margin: 8px 0;
+}
+
+th{
+  text-align: left;
 }
 
 #carrot_1{
@@ -682,4 +831,9 @@ select{
   0%{opacity: 0;}
   80%{opacity: 0;}
   100%{opacity: 1}
+}
+
+@keyframes grow {
+  0%{width: 0}
+  100%{width: 100%;}
 }

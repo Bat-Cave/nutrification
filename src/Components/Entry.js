@@ -73,6 +73,12 @@ class Entry extends Component{
 
   }
 
+  removeFromMeal = (id) =>{
+    let mealToDestroy = this.state.meal
+    mealToDestroy.splice(id, 1)
+    this.setState({meal: mealToDestroy})
+  }
+
   addMeal = async () =>{
     const ids = [];
     const items = [];
@@ -298,7 +304,7 @@ class Entry extends Component{
             nutrients.carbohydrates += amount*this.state.meal[k].servings;
           }
           if(rank === 100){
-            nutrients.water += amount*this.state.meal[k].servings;
+            nutrients.water += (amount*this.state.meal[k].servings)/236.59;
           }
           if(rank === 1520 || rank === 1510){
             nutrients.sugar += amount*this.state.meal[k].servings;
@@ -356,16 +362,18 @@ class Entry extends Component{
       };
       return(
         <div key={i} className='search-result'>
-          <div className='search-column'>{e.date} - {this.state.time}</div>
+          <div className='search-column'>
+            <button onClick={() => this.removeFromMeal(i)}><i className="fas fa-trash-alt"></i></button> 
+            <p><i className="fas fa-utensils"></i> {e.servings}</p>
+          </div>
           <div className='search-column f'>{e.fdcId}</div>
-          <div className='search-column'>{e.servings}: {e.description.replace(/(\B)[^ ]*/g,match =>(match.toLowerCase())).replace(/^[^ ]/g,match=>(match.toUpperCase()))}</div>
+          <div className='search-column'>{e.description.replace(/(\B)[^ ]*/g,match =>(match.toLowerCase())).replace(/^[^ ]/g,match=>(match.toUpperCase()))}</div>
           <div className='search-column'>{brandOwner}</div>
         </div>
       )
     })
-
     return(
-      <div className={this.state.containerClass}>
+      <div className={this.props.containerClass}>
         <h1>NEW ENTRY</h1>
         <div className='entry-section'>
           <div className='date-input'>
@@ -385,29 +393,27 @@ class Entry extends Component{
                 <div className='search-column h'>Brand</div>
               </div>
               <div className='search-results'>
-                {searchResults}
+                {searchResults.length === 0 ? <div className='div'>Search something above.</div> : searchResults}
               </div>
             </div>
           </div>
         </div>
-        <br></br>
-        <br></br>
         <div className='entry-section'>
           <div className='search-top'>
             <h3>Meal</h3>
             <div className='add-meal'>
               <button onClick={() => this.addMeal()}>Add Meal</button>
-              <input name='mealName' type='text' onChange={(e)=> this.handleInput(e.target.name, e.target.value)} placeholder='Meal Name...'/>
+              <input id='stupid-input' name='mealName' type='text' onChange={(e)=> this.handleInput(e.target.name, e.target.value)} placeholder='Meal Name...'/>
             </div>
           </div>
           <div className='search-header'>
-            <div className='search-column h'>Date</div>
-            <div className='search-column f h'>FDC ID</div>
-            <div className='search-column h'>Description</div>
-            <div className='search-column h'>Brand</div>
+            <div className='search-column h g'>Servings</div>
+            <div className='search-column f h g'>FDC ID</div>
+            <div className='search-column h g'>Description</div>
+            <div className='search-column h g'>Brand</div>
           </div>
             <div className='search-results'>
-              {mealItems}
+              {mealItems.length === 0 ? <div className='div'>Add an item from the search results.</div> : mealItems}
             </div>
         </div>
       </div>

@@ -58,7 +58,7 @@ const getSignedRequest = ([file], id) => {
 const Profile = (props) => {
   console.log(props)
   return(
-    <div className='container'>
+    <div className={props.containerClass}>
       <h1>PROFILE</h1>
       <div className='prof-top'>
           <h2>{props.first_name} {props.last_name}</h2>

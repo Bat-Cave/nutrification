@@ -104,5 +104,9 @@ module.exports = {
       const db = req.app.get('db');
       const data = await db.get_recommended();
       res.status(200).send(data)
+    },
+    logout: (req, res) => {
+      req.session.destroy();
+      res.status(200).send('Session Destroyed');
     }
   }

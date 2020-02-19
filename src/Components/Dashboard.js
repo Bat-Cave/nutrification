@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {connect} from 'react-redux';
-import {updateUser} from '../dux/reducer';
+import {updateUser, updateMealHistory} from '../dux/reducer';
 import axios from 'axios';
 
 const Dashboard = (props) => {
@@ -8,9 +8,8 @@ const Dashboard = (props) => {
   const [history, setHistory] = useState([]);
   const [today, setToday] = useState([]);
   const [date, setDate] = useState('');
-  const [containerClass, setContainerClass] = useState('container');
   const [recommended, setRecommended] = useState('');
-  const [keyz, setKeys] = useState([]);
+  const [keys, setKeys] = useState(["Biotin", "Folic Acid", "Niacin", "Pantothenic Acid", "Riboflavin", "Thiamin", "Vitamin A", "Vitamin B6", "Vitamin B12", "Vitamin C", "Vitamin D", "Vitamin E", "Vitamin K", "Calcium", "Chloride", "Chromium", "Copper", "Iodine", "Iron", "Magnesium", "Mangenese", "Molybdenum", "Phosphorus", "Potassium", "Selenium", "Sodium", "Zinc", "Protein", "Fiber", "Water", "Carbohydrates", "Sugar", "Fat", "Calories", "Alcohol", "Caffeine"]);
 
   const getMe = () => {
     axios.get('/api/me').then(res => {
@@ -23,18 +22,14 @@ const Dashboard = (props) => {
 
   let todaysHistory = history.filter(entry => entry.entry_date === date)
 
-  let sum = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-  let keys = [];
+  let sum = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   function getTodayStats(){
     for(let i = 0; i < todaysHistory.length; i++){
       for(let j = 6; j < Object.keys(todaysHistory[i]).length; j++){
         sum[j] = sum[j] + +todaysHistory[i][Object.keys(todaysHistory[i])[j]];
-        keys.push(Object.keys(todaysHistory[i])[j])
         // console.log(todaysHistory[i][Object.keys(todaysHistory[i])[j]])
       }
     }
-    keys.push('Protein', 'Fiber', 'Water', 'Carbohydrates', 'Sugar', 'Fat', 'Calories', 'Alcohol', 'Caffeine')
-    console.log(keys)
   }
   
   const getDate = () => {
@@ -48,7 +43,6 @@ const Dashboard = (props) => {
       }
     }
     const dateDefault = `${month()}/${d.getDate()}/${d.getFullYear()}`
-    console.log(dateDefault)
     setDate(dateDefault)
   }
   
@@ -56,21 +50,32 @@ const Dashboard = (props) => {
     getMe();
     getDate();
     axios.get(`/api/userHistory/${props.id}`).then(res => {
-      console.log(res.data)
       setHistory(res.data.reverse());
-      setContainerClass('container left');
+      props.updateMealHistory(res.data.reverse())
     })
     axios.get('/api/recommended').then(res => {
-      setRecommended(res.data);
+      let rec = res.data;
+      let fiber = 30
+      if(props.gender === 'female'){
+        fiber = 25
+      }
+      rec.push(
+        {m_recommended: props.rec_daily_protein, m_units: 'g'}, 
+        {m_recommended: fiber, m_units: 'g'},
+        {m_recommended: props.rec_daily_water, m_units: 'cups'},
+        {m_recommended: props.rec_daily_carb, m_units: 'g'},
+        {m_recommended: 0, m_units: 'g'},
+        {m_recommended: props.rec_daily_fat, m_units: 'g'},
+        {m_recommended: props.rec_daily_calorie, m_units: 'calories'},
+        {m_recommended: 0, m_units: 'g'},
+        {m_recommended: 0, m_units: 'g'})
+      setRecommended(rec);
     })
     setToday(todaysHistory);
     
   }, [])
 
-  // useEffect(() => {
-  //   setKeys(keys)    
-  // })
-  
+
   
   getTodayStats();
 
@@ -78,19 +83,18 @@ const Dashboard = (props) => {
   const todayStats = sum.map((e, i) => {
     index = i - 6;
     let rec = 0;
-    let name;
+    let unit = '';
     if(recommended[index]){
       rec = recommended[index].m_recommended
+      unit = recommended[index].m_units
     }
-    let unique = keyz.splice(36, keyz.length - 36);
-    console.log(unique)
     let percent = e*100/rec
     if(index >= 0){
       return(
-        <div className='stat-container'>
-          <h4>{unique[index]}</h4>
-          <div className='bar'><p className='consumed' style={{width: percent +'%'}}>{e}</p></div>
-          <div className='bar'><p className='recommended'>{rec}</p></div>
+        <div key={i} className='stat-container'>
+          <h4>{keys[index]}</h4>
+          <div className='bar'><p className='consumed' style={{width: percent +'%'}}><span className='p-span'>{`${e.toFixed(2)} ${unit}`}</span></p></div>
+          <div className='bar'><p className='recommended'>{rec} {unit}</p></div>
         </div>
       )
     } else {
@@ -145,70 +149,20 @@ const Dashboard = (props) => {
           </div>
     )
   })
+
+
   return(
-    <div className={containerClass}>
+    <div className={props.containerClass}>
       <h1>DASHBOARD</h1>
       <div className="dash-top">
         <div className='welcome-container'>
-          <h2>Hello{props.first_name ? `, ${props.first_name}` : null}</h2>
-        </div>
-        <div className='recommendations'>
-          <p>Based on your information, you need:</p>
-          <ul>
-            <li><span className='rec-span'>{props.rec_daily_water || '{Water}'}</span> cups of Water</li>
-            <li><span className='rec-span'>{props.rec_daily_calorie || '{Calories}'}</span> Calories</li>
-            <li><span className='rec-span'>{props.rec_daily_protein || '{Protein}'}</span> grams of Protein</li>
-            <li><span className='rec-span'>{props.rec_daily_carb || '{Carbs}'}</span> grams of Carbohydrates</li>
-            <li><span className='rec-span'>{props.rec_daily_fat || '{Fat}'}</span> grams of Fat</li>
-          </ul>
+          <h2>Hello{props.first_name ? `, ${props.first_name}.` : null}</h2>
         </div>
       </div>
       <div className='dash-middle'>
-        {todayStats}
-      </div>
-      <div className='dash-bottom'>
-        <div className='table-header'>
-          {/* <div className='column s'><p></p></div> */}
-          <div className='column'><p>Date</p></div>
-          <div className='column'><p>Meal Name</p></div>
-          <div className='column you-ate-column'><p>You Ate</p></div>
-          <div className='column'><p>Water</p></div>
-          <div className='column'><p>Calories</p></div>
-          <div className='column'><p>Protein</p></div>
-          <div className='column'><p>Fiber</p></div>
-          <div className='column'><p>Carbs</p></div>
-          <div className='column'><p>Sugar</p></div>
-          <div className='column'><p>Fat</p></div>
-          <div className='column v'><p>Biotin</p></div>
-          <div className='column v'><p>Folic Acid</p></div>
-          <div className='column v'><p>Niacin</p></div>
-          <div className='column v'><p>Pantothenic Acid</p></div>
-          <div className='column v'><p>Riboflavin</p></div>
-          <div className='column v'><p>Thiamin</p></div>
-          <div className='column v'><p>Vitamin A</p></div>
-          <div className='column v'><p>Vitamin B6</p></div>
-          <div className='column v'><p>Vitamin B12</p></div>
-          <div className='column v'><p>Vitamin C</p></div>
-          <div className='column v'><p>Vitamin D</p></div>
-          <div className='column v'><p>Vitamin E</p></div>
-          <div className='column v'><p>Vitamin K</p></div>
-          <div className='column m'><p>Calcium</p></div>
-          <div className='column m'><p>Chloride</p></div>
-          <div className='column m'><p>Chromium</p></div>
-          <div className='column m'><p>Copper</p></div>
-          <div className='column m'><p>Iodine</p></div>
-          <div className='column m'><p>Iron</p></div>
-          <div className='column m'><p>Magnesium</p></div>
-          <div className='column m'><p>Molybdenum</p></div>
-          <div className='column m'><p>Phosphorus</p></div>
-          <div className='column m'><p>Potassium</p></div>
-          <div className='column m'><p>Selenium</p></div>
-          <div className='column m'><p>Sodium</p></div>
-          <div className='column m'><p>Zinc</p></div>
-          {/* <div className='column s'><p></p></div> */}
-        </div>
-        <div className='table'>
-          {mappedHistory}
+        <h3>Today's Nutrition</h3>
+        <div className='today-stats'>
+          {todayStats}
         </div>
       </div>
     </div>
@@ -219,4 +173,4 @@ function mapStateToProps(state) {
   return state;
 }
 
-export default connect(mapStateToProps, {updateUser})(Dashboard);
+export default connect(mapStateToProps, {updateUser, updateMealHistory})(Dashboard);
