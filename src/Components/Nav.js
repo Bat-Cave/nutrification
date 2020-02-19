@@ -93,7 +93,7 @@ class Nav extends Component{
           </table>
         </div>
           <div className='nav-bottom'>
-            <a onClick={() => this.logout()}>Logout</a>
+            <button id='logout-button' onClick={() => this.logout()}>Logout</button>
           </div>
         </div>
       )

@@ -57,8 +57,6 @@ export default function reducer(state = initialState, action){
         mealHistory: payload.mealHistory       
       }
     case UPDATE_CONTAINER_CLASS:
-      console.log(payload);
-      console.log(payload.containerClass)
       return {
         ...state,
         containerClass: payload      
@@ -90,7 +88,6 @@ export function updateMealHistory(mealHistory) {
 }
 
 export function updateContainerClass(containerClass) {
-  console.log(containerClass)
   return {
     type: UPDATE_CONTAINER_CLASS,
     payload: containerClass

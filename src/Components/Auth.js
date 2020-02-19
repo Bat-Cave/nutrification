@@ -64,7 +64,7 @@ class Auth extends Component {
     const {email, password} = this.state;
     await axios.post('/api/login', {email, password}).then(res => {
       this.props.updateUser(res.data);
-      setTimeout(() => {this.props.history.push('/')}, 2000);
+      setTimeout(() => {this.props.history.push('/')}, 1000);
     }).catch(err => {
       if(err){
         this.setState({loginError: 'error'})

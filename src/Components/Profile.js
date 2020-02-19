@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 import {connect} from 'react-redux';
 import {updatePic} from '../dux/reducer';
@@ -56,7 +56,9 @@ const getSignedRequest = ([file], id) => {
 
 
 const Profile = (props) => {
-  console.log(props)
+
+  const [editing, setEditing] = useState(false);
+
   return(
     <div className={props.containerClass}>
       <h1>PROFILE</h1>
@@ -64,41 +66,39 @@ const Profile = (props) => {
           <h2>{props.first_name} {props.last_name}</h2>
           <div className='prof-image'>
             <img src={props.profile_pic || 'https://static.scrum.org/web/images/profile-placeholder.png'} alt='profile'/>
-            <input type='file' onChange={(e) => getSignedRequest(e.target.files, props.id)}/>
+            <label id='profile-upload'>
+              <input type='file' onChange={(e) => getSignedRequest(e.target.files, props.id)}/>
+              <i className="fas fa-pen"></i> Change Profile Picture
+            </label>
           </div>
       </div>
       <div className='prof-bottom'>
         <div className='profile-info'>
           <div className='profile-row'>
             <h4>Email:</h4>
-            <p>{props.email}</p>
-            {/* <input type='text'/> */}
+            {editing ? <input type='text' placeholder={props.email}/> : <p>{props.email}</p> }
           </div>
           <div className='profile-row'>
             <h4>Height:</h4>
-            <p>{`${props.height} inches`}</p>
-            {/* <input type='text'/> */}
+            {editing ? <input type='number' placeholder={`${props.height} inches`}/> : <p>{`${props.height} inches`}</p> }
           </div>
           <div className='profile-row'>
             <h4>Weight:</h4>
-            <p>{`${props.weight} pounds`}</p>
-            {/* <input type='text' /> */}
+            {editing ? <input type='number' placeholder={`${props.weight} pounds`}/> : <p>{`${props.weight} pounds`}</p> }
           </div>
           <div className='profile-row'>
             <h4>Gender:</h4>
-            <p>{props.gender}</p>
-            {/* <input type='text' /> */}
+            {editing ? <input type='text' placeholder={props.gender}/> : <p>{props.gender}</p> }
           </div>
           <div className='profile-row'>
             <h4>Age:</h4>
-            <p>{props.age}</p>
-            {/* <input type='text' /> */}
+            {editing ? <input type='number' placeholder={props.age}/> : <p>{props.age}</p> }
           </div>
           <div className='profile-row'>
             <h4>Activity Level:</h4>
-            <p>{props.activity_level}</p>
-            {/* <input type='text' /> */}
+            {editing ? <input type='text' placeholder={props.activity_level}/> : <p>{props.activity_level}</p> }
           </div>
+          <button onClick={() => setEditing(!editing)}><i className="fas fa-pen"></i></button>
         </div>
       </div>
     </div>

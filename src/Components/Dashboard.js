@@ -102,55 +102,6 @@ const Dashboard = (props) => {
     }
   })
 
-  const mappedHistory = history.map((e, i) => {
-    let youAte = e.you_ate.split('|');
-    youAte.shift();
-    let joined = youAte.join(', ');
-    return(
-      <div className='table-row' key={i}>
-            {/* <div className='column s'><p></p></div> */}
-            <div className='column th'><p>{e.entry_date} - {e.entry_time}</p></div>
-            <div className='column th'><p>{e.meal_name}</p></div>
-            <div className='column you-ate'><p>{joined}</p></div>
-            <div className='column th'><p>{parseFloat(e.water).toFixed(2)} cups</p></div>
-            <div className='column th'><p>{parseFloat(e.calories).toFixed(2)}</p></div>
-            <div className='column th'><p>{parseFloat(e.protein).toFixed(2)} g</p></div>
-            <div className='column th'><p>{parseFloat(e.fiber).toFixed(2)} g</p></div>
-            <div className='column th'><p>{parseFloat(e.carbohydrates).toFixed(2)} g</p></div>
-            <div className='column th'><p>{parseFloat(e.sugar).toFixed(2)} g</p></div>
-            <div className='column th'><p>{parseFloat(e.fat).toFixed(2)} g</p></div>
-            <div className='column th'><p>{parseFloat(e.biotin).toFixed(2)} mcg</p></div>
-            <div className='column th'><p>{parseFloat(e.folate_folic_acid).toFixed(2)} mcg</p></div>
-            <div className='column th'><p>{parseFloat(e.niacin).toFixed(2)} mg</p></div>
-            <div className='column th'><p>{parseFloat(e.pantothenic_acid).toFixed(2)} mg</p></div>
-            <div className='column th'><p>{parseFloat(e.riboflavin).toFixed(2)} mg</p></div>
-            <div className='column th'><p>{parseFloat(e.thiamin).toFixed(2)} mg</p></div>
-            <div className='column th'><p>{parseFloat(e.vitamin_a).toFixed(2)} IU</p></div>
-            <div className='column th'><p>{parseFloat(e.vitamin_b6).toFixed(2)} mg</p></div>
-            <div className='column th'><p>{parseFloat(e.vitamin_b12).toFixed(2)} mcg</p></div>
-            <div className='column th'><p>{parseFloat(e.vitamin_c).toFixed(2)} mg</p></div>
-            <div className='column th'><p>{parseFloat(e.vitamin_d).toFixed(2)} IU</p></div>
-            <div className='column th'><p>{parseFloat(e.vitamin_e).toFixed(2)} mg</p></div>
-            <div className='column th'><p>{parseFloat(e.vitamin_k).toFixed(2)} mcg</p></div>
-            <div className='column th'><p>{parseFloat(e.calcium).toFixed(2)} mg</p></div>
-            <div className='column th'><p>{parseFloat(e.chloride).toFixed(2)} mg</p></div>
-            <div className='column th'><p>{parseFloat(e.chromium).toFixed(2)} mcg</p></div>
-            <div className='column th'><p>{parseFloat(e.copper).toFixed(2)} mg</p></div>
-            <div className='column th'><p>{parseFloat(e.iodine).toFixed(2)} mcg</p></div>
-            <div className='column th'><p>{parseFloat(e.iron).toFixed(2)} mg</p></div>
-            <div className='column th'><p>{parseFloat(e.magnesium).toFixed(2)} mg</p></div>
-            <div className='column th'><p>{parseFloat(e.molybdenum).toFixed(2)} mcg</p></div>
-            <div className='column th'><p>{parseFloat(e.phosphorus).toFixed(2)} mg</p></div>
-            <div className='column th'><p>{parseFloat(e.potassium).toFixed(2)} mg</p></div>
-            <div className='column th'><p>{parseFloat(e.selenium).toFixed(2)} mcg</p></div>
-            <div className='column th'><p>{parseFloat(e.sodium).toFixed(2)} mg</p></div>
-            <div className='column th'><p>{parseFloat(e.zinc).toFixed(2)} mg</p></div>
-            {/* <div className='column s'><p></p></div> */}
-          </div>
-    )
-  })
-
-
   return(
     <div className={props.containerClass}>
       <h1>DASHBOARD</h1>
