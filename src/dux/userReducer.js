@@ -24,7 +24,6 @@ export default function userReducer(state = initialState, action){
   const {type, payload} = action;
   switch(type){
     case UPDATE_USER:
-      console.log(payload)
       return {
         ...state,
         id: payload.user_id,

@@ -28,10 +28,8 @@ class Nav extends Component{
   }
 
   getMe = () => {
-    console.log('Hit getMe()');
     axios.get('/api/me').then(res => {
       this.props.updateUser(res.data)
-      console.log(res.data);
     }).catch(err => {
       console.log(err);
       this.props.history.push('/auth/login')
@@ -51,7 +49,6 @@ class Nav extends Component{
   }
 
   render(){
-    console.log(this.props)
     if(!this.props.location.pathname.includes("/auth")){
       return(
         <div className={this.state.navClass}>

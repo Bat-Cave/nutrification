@@ -144,7 +144,6 @@ class Auth extends Component {
   
 
   render(){
-    console.log(this.props)
     if(this.props.location.pathname !== "/auth/register"){
     return(
       <div className='auth-container'>

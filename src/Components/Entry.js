@@ -375,46 +375,49 @@ class Entry extends Component{
     return(
       <div className={this.props.reducer.containerClass}>
         <h1>NEW ENTRY</h1>
-        <div className='entry-section'>
-          <div className='date-input'>
-            <input name='dateDefault' type='date' value={this.state.dateDefault} onChange={e => this.handleInput(e.target.name, e.target.value)}/>
+        <div className='entry-wrapper'>
+          <div className='entry-section'>
+            <div className='date-input'>
+              <p>Date: </p>
+              <input name='dateDefault' type='date' value={this.state.dateDefault} onChange={e => this.handleInput(e.target.name, e.target.value)}/>
+            </div>
+            <div className='search-container'>
+              <div className='search-top'>
+                <input name='searchIn' value={this.state.searchIn} type='search' autoComplete='off' placeholder='Search for food...' onChange={(e)=> this.handleInput(e.target.name, e.target.value)}/>
+                <input name='brandIn' value={this.state.brandIn} type='search' placeholder='Brand (optional)...' onChange={(e)=> this.handleInput(e.target.name, e.target.value)}/>
+                <button onClick={() => this.search()}><i className="fas fa-search"></i></button>
+              </div>
+              <div className='search-table top'>
+                <div className='search-header'>
+                  <div className='search-column h'>Servings</div>
+                  <div className='search-column f h'>FDC ID</div>
+                  <div className='search-column h'>Description</div>
+                  <div className='search-column h'>Brand</div>
+                </div>
+                <div className='search-results'>
+                  {searchResults.length === 0 ? <div className='div'>Search something above.</div> : searchResults}
+                </div>
+              </div>
+            </div>
           </div>
-          <div className='search-container'>
+          <div className='entry-section'>
             <div className='search-top'>
-              <input name='searchIn' value={this.state.searchIn} type='search' autoComplete='off' placeholder='Search for food...' onChange={(e)=> this.handleInput(e.target.name, e.target.value)}/>
-              <input name='brandIn' value={this.state.brandIn} type='search' placeholder='Brand (optional)...' onChange={(e)=> this.handleInput(e.target.name, e.target.value)}/>
-              <button onClick={() => this.search()}><i className="fas fa-search"></i></button>
-            </div>
-            <div className='search-table'>
-              <div className='search-header'>
-                <div className='search-column h'>Servings</div>
-                <div className='search-column f h'>FDC ID</div>
-                <div className='search-column h'>Description</div>
-                <div className='search-column h'>Brand</div>
+              <h3>Meal</h3>
+              <div className='add-meal'>
+                <input id='stupid-input' name='mealName' type='text' onChange={(e)=> this.handleInput(e.target.name, e.target.value)} placeholder='Meal Name...'/>
+                <button onClick={() => this.addMeal()}>Add Meal</button>
               </div>
+            </div>
+            <div className='search-header'>
+              <div className='search-column h g'>Servings</div>
+              <div className='search-column f h g'>FDC ID</div>
+              <div className='search-column h g'>Description</div>
+              <div className='search-column h g'>Brand</div>
+            </div>
               <div className='search-results'>
-                {searchResults.length === 0 ? <div className='div'>Search something above.</div> : searchResults}
+                {mealItems.length === 0 ? <div className='div'>Add an item from the search results.</div> : mealItems}
               </div>
-            </div>
           </div>
-        </div>
-        <div className='entry-section'>
-          <div className='search-top'>
-            <h3>Meal</h3>
-            <div className='add-meal'>
-              <button onClick={() => this.addMeal()}>Add Meal</button>
-              <input id='stupid-input' name='mealName' type='text' onChange={(e)=> this.handleInput(e.target.name, e.target.value)} placeholder='Meal Name...'/>
-            </div>
-          </div>
-          <div className='search-header'>
-            <div className='search-column h g'>Servings</div>
-            <div className='search-column f h g'>FDC ID</div>
-            <div className='search-column h g'>Description</div>
-            <div className='search-column h g'>Brand</div>
-          </div>
-            <div className='search-results'>
-              {mealItems.length === 0 ? <div className='div'>Add an item from the search results.</div> : mealItems}
-            </div>
         </div>
       </div>
     )

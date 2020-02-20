@@ -109,7 +109,6 @@ const Dashboard = (props) => {
   })
 
   const data = d3data.splice(12, d3data.length - 12)
-  console.log(data);
 
   return(
     <div className={props.reducer.containerClass}>
@@ -120,7 +119,6 @@ const Dashboard = (props) => {
         </div>
       </div>
       <div className='dash-middle'>
-        <h3>Today's Nutrition</h3>
         <div className='today-stats'>
           <BarChart data={data}/>
           {todayStats}

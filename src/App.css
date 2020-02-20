@@ -97,7 +97,7 @@ body{
   background: white;
   margin-left: 208px;
   padding: 24px 10%;
-  overflow-x: hidden;
+  overflow-x: auto;
   transition: all .5s ease;
 }
 
@@ -121,6 +121,7 @@ body{
   width: 100%;
   display: flex;
   padding: 8px 0;
+  border-radius: 16px;
   box-shadow: -2px -2px 8px rgba(255, 255, 255, 1),
               -2px -2px 12px rgba(185, 185, 185, 0.5),
               inset 2px 2px 4px rgba(141, 141, 141, 0.1),
@@ -178,6 +179,7 @@ body{
   height: 100px;
   margin: 16px 4px;
   padding: 16px;
+  border-radius: 16px;
   box-shadow: -2px -2px 8px rgba(255, 255, 255, 1),
               -2px -2px 12px rgba(185, 185, 185, 0.5),
               inset 2px 2px 4px rgba(141, 141, 141, 0.1),
@@ -467,22 +469,33 @@ input[type="file"] {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-end;
-  padding: 16px 0;
+  padding: 0;
+  margin-bottom: 8px;
 }
 
-.entry-section input{
+.entry-wrapper{
+  width: 100%;
+  height: 100%;
+}
+
+.date-input input{
   margin-right: 16px;
-  margin-bottom: 16px;
+  margin-top: 0;
   width: 200px;
   height: 30px;
   text-align: center
 }
 
+.date-input p{
+  margin-right: 8px;
+}
+
 .date-input{
   width: 100%;
-  height: 50px;
+  height: auto;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
 }
 
 .search-top{
@@ -496,12 +509,14 @@ input[type="file"] {
 .add-meal {
   width: 50%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 }
 
 #stupid-input{
   align-self: flex-end;
+  width: 250px;
+  margin-right: 16px;
 }
 
 .search-top input{
@@ -516,8 +531,12 @@ input[type="file"] {
 
 .search-table{
   width: 100%;
-  height: calc(100%);
-  border: 1px solid black;
+  height: calc(100% - 50px);
+  overflow: auto;
+}
+
+.top{
+  height: 100%;
 }
 
 .search-header{
@@ -534,14 +553,14 @@ input[type="file"] {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid black;
+  
 }
 
 .search-results{
-  height: calc(100% - 15px);
+  height: calc(100% - 50px);
   width: 100%;
   box-shadow: inset 0 0 4px 4px rgba(65, 65, 65, 0.5);
-  overflow-y: scroll;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -553,7 +572,7 @@ input[type="file"] {
   justify-content: center;
   margin: 12px;
   color: grey;
-  height: calc(100%);
+  height: calc(100% - 50px);
 }
 
 .search-result{
@@ -785,16 +804,19 @@ input[type="file"] {
 
 .chart-container{
   display: flex;
-  height: auto;
+  flex-direction: column;
+  width: 100%;
+  padding: 16px 10%;
+  border-radius: 16px;
+  box-shadow: -2px -2px 8px rgba(255, 255, 255, 1),
+              -2px -2px 12px rgba(185, 185, 185, 0.5),
+              inset 2px 2px 4px rgba(141, 141, 141, 0.1),
+              2px 2px 8px rgba(0, 0, 0, .15);;
 }
 
-.chart-container div{
-  height: auto;
-}
-
-.canvas svg {
-  height: auto;
-  min-height: 600px;
+.chart{
+  display: flex;
+  width: 100%;
 }
 
 svg rect:nth-of-type(2n + 0){
