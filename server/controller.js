@@ -108,5 +108,19 @@ module.exports = {
     logout: (req, res) => {
       req.session.destroy();
       res.status(200).send('Session Destroyed');
+    },
+    updateUser: async (req, res) => {
+      const {email, height, weight, gender, age, activity_level} = req.body;
+      const {id} = req.params;
+      const db = req.app.get('db');
+
+      const update = await db.update_user(id, email, height, weight, gender, age, activity_level)
+      res.status(200).send(update)
+    },
+    deleteMeal: async (req, res) => {
+      const {id} = req.params
+      const db = req.app.get('db');
+      const del = await db.delete_meal(id);
+      res.status(200).send(del)
     }
   }

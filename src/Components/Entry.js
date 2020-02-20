@@ -87,7 +87,7 @@ class Entry extends Component{
     convertedDate[3] = year;
     convertedDate.shift();
     const nutrients = {
-      user_id: this.props.id,
+      user_id: this.props.userReducer.id,
       meal_name: this.state.mealName,
       entry_date: convertedDate.join('/'),
       entry_time: this.state.time,
@@ -373,7 +373,7 @@ class Entry extends Component{
       )
     })
     return(
-      <div className={this.props.containerClass}>
+      <div className={this.props.reducer.containerClass}>
         <h1>NEW ENTRY</h1>
         <div className='entry-section'>
           <div className='date-input'>

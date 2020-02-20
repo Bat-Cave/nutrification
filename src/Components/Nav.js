@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {updateUser, updateContainerClass} from '../dux/reducer';
+import {updateContainerClass} from '../dux/reducer';
+import {updateUser} from '../dux/userReducer';
 import {connect} from 'react-redux';
 import axios from 'axios';
 
@@ -50,13 +51,14 @@ class Nav extends Component{
   }
 
   render(){
+    console.log(this.props)
     if(!this.props.location.pathname.includes("/auth")){
       return(
         <div className={this.state.navClass}>
           <span className={this.state.toggleIcon} onClick={() => this.toggleNav()}><i className="fas fa-angle-double-left"></i></span>
           <div className='nav-top'>
             <div className='profile_pic_container'>
-              <img src={this.props.profile_pic || 'https://static.scrum.org/web/images/profile-placeholder.png'} alt='profile'/>
+              <img src={this.props.userReducer.profile_pic || 'https://static.scrum.org/web/images/profile-placeholder.png'} alt='profile'/>
             </div>
           <Link to='/'>Dashboard</Link>
           <Link to='/entry'>New Entry</Link>
@@ -71,23 +73,23 @@ class Nav extends Component{
               </tr>
               <tr>
                 <td>Water:</td>
-                <td>{this.props.rec_daily_water || '{Water}'} cups</td>
+                <td>{this.props.userReducer.rec_daily_water || '{Water}'} cups</td>
               </tr>
               <tr>
                 <td>Calories:</td>
-                <td>{this.props.rec_daily_calorie || '{Calories}'}</td>
+                <td>{this.props.userReducer.rec_daily_calorie || '{Calories}'}</td>
               </tr>
               <tr>
                 <td>Protein:</td>
-                <td>{this.props.rec_daily_protein || '{Protein}'} g</td>
+                <td>{this.props.userReducer.rec_daily_protein || '{Protein}'} g</td>
               </tr>
               <tr>
                 <td>Carbs:</td>
-                <td>{this.props.rec_daily_carb || '{Carbs}'} g</td>
+                <td>{this.props.userReducer.rec_daily_carb || '{Carbs}'} g</td>
               </tr>
               <tr>
                 <td>Fat:</td>
-                <td>{this.props.rec_daily_fat || '{Fat}'} g</td>
+                <td>{this.props.userReducer.rec_daily_fat || '{Fat}'} g</td>
               </tr>
             </tbody>
           </table>

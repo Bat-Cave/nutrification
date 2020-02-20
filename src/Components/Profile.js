@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import {connect} from 'react-redux';
-import {updatePic} from '../dux/reducer';
+import {updatePic, updateUser} from '../dux/userReducer';
 
 const uploadFile = (file, signedRequest, id) => {
   const options = {
@@ -58,16 +58,47 @@ const getSignedRequest = ([file], id) => {
 const Profile = (props) => {
 
   const [editing, setEditing] = useState(false);
+  const [submitClass, setSubmitClass] = useState('profile-submit hidden');
+  const [profileInfo, setProfileInfo] = useState({
+    email: props.userReducer.email,
+    height: props.userReducer.height,
+    weight: props.userReducer.weight,
+    gender: props.userReducer.gender,
+    age: props.userReducer.age,
+    activity_level: props.userReducer.activity_level
+  })
+
+  const toggleEdit = () => {
+    setEditing(!editing)
+    if(submitClass === 'profile-submit'){
+      setSubmitClass('profile-submit hidden')
+    } else {
+      setSubmitClass('profile-submit')
+    }
+  }
+
+  const handleInput = (name, val) => {
+    setProfileInfo({...profileInfo, [name]: val})
+  }
+
+  const handleSubmit = () => {
+    const {email, height, weight, gender, age, activity_level} = profileInfo
+    axios.put(`/api/updateUser/${props.userReducer.id}`, {email, height, weight, gender, age, activity_level}).then(res => {
+      console.log(res.data)
+      props.updateUser(res.data)
+    })
+  }
+
 
   return(
-    <div className={props.containerClass}>
+    <div className={props.reducer.containerClass}>
       <h1>PROFILE</h1>
       <div className='prof-top'>
-          <h2>{props.first_name} {props.last_name}</h2>
+          <h2>{props.userReducer.first_name} {props.userReducer.last_name}</h2>
           <div className='prof-image'>
-            <img src={props.profile_pic || 'https://static.scrum.org/web/images/profile-placeholder.png'} alt='profile'/>
+            <img src={props.userReducer.profile_pic || 'https://static.scrum.org/web/images/profile-placeholder.png'} alt='profile'/>
             <label id='profile-upload'>
-              <input type='file' onChange={(e) => getSignedRequest(e.target.files, props.id)}/>
+              <input type='file' onChange={(e) => getSignedRequest(e.target.files, props.userReducer.id)}/>
               <i className="fas fa-pen"></i> Change Profile Picture
             </label>
           </div>
@@ -76,29 +107,32 @@ const Profile = (props) => {
         <div className='profile-info'>
           <div className='profile-row'>
             <h4>Email:</h4>
-            {editing ? <input type='text' placeholder={props.email}/> : <p>{props.email}</p> }
+            {editing ? <input name='email' type='text' placeholder={props.userReducer.email} onChange={(e) => handleInput(e.target.name, e.target.value)}/> : <p>{props.userReducer.email}</p> }
           </div>
           <div className='profile-row'>
             <h4>Height:</h4>
-            {editing ? <input type='number' placeholder={`${props.height} inches`}/> : <p>{`${props.height} inches`}</p> }
+            {editing ? <input name='height' type='number' placeholder={`${props.userReducer.height} inches`} onChange={(e) => handleInput(e.target.name, e.target.value)}/> : <p>{`${props.userReducer.height} inches`}</p> }
           </div>
           <div className='profile-row'>
             <h4>Weight:</h4>
-            {editing ? <input type='number' placeholder={`${props.weight} pounds`}/> : <p>{`${props.weight} pounds`}</p> }
+            {editing ? <input name='weight' type='number' placeholder={`${props.userReducer.weight} pounds`} onChange={(e) => handleInput(e.target.name, e.target.value)}/> : <p>{`${props.userReducer.weight} pounds`}</p> }
           </div>
           <div className='profile-row'>
             <h4>Gender:</h4>
-            {editing ? <input type='text' placeholder={props.gender}/> : <p>{props.gender}</p> }
+            {editing ? <input name='gender' type='text' placeholder={props.userReducer.gender} onChange={(e) => handleInput(e.target.name, e.target.value)}/> : <p>{props.userReducer.gender}</p> }
           </div>
           <div className='profile-row'>
             <h4>Age:</h4>
-            {editing ? <input type='number' placeholder={props.age}/> : <p>{props.age}</p> }
+            {editing ? <input name='age' type='number' placeholder={props.userReducer.age} onChange={(e) => handleInput(e.target.name, e.target.value)}/> : <p>{props.userReducer.age}</p> }
           </div>
           <div className='profile-row'>
             <h4>Activity Level:</h4>
-            {editing ? <input type='text' placeholder={props.activity_level}/> : <p>{props.activity_level}</p> }
+            {editing ? <input name='activity_level' type='text' placeholder={props.userReducer.activity_level} onChange={(e) => handleInput(e.target.name, e.target.value)}/> : <p>{props.userReducer.activity_level}</p> }
           </div>
-          <button onClick={() => setEditing(!editing)}><i className="fas fa-pen"></i></button>
+          <div className='profile-row'>
+            <button onClick={() => toggleEdit()}>{editing ? <i className="fas fa-times"></i> : <i className="fas fa-pen"></i>}</button>
+            <button className={submitClass} onClick={() => handleSubmit()}><i className="fas fa-check"></i></button>
+          </div>
         </div>
       </div>
     </div>
@@ -109,4 +143,4 @@ function mapStateToProps(state) {
   return state;
 }
 
-export default connect(mapStateToProps, {updatePic})(Profile);
+export default connect(mapStateToProps, {updatePic, updateUser})(Profile);

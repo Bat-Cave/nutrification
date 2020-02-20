@@ -28,6 +28,8 @@ app.get('/api/userHistory/:id', ctrl.getUserHistory)
 app.get('/sign-s3', ctrl.s3Upload)
 app.get('/api/recommended', ctrl.getRecommended)
 app.post('/api/auth/logout', ctrl.logout)
+app.put('/api/updateUser/:id', ctrl.updateUser)
+app.delete('/api/meal/:id', ctrl.deleteMeal)
 
 
 massive(CONNECTION_STRING).then(db => {

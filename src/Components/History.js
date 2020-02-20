@@ -8,10 +8,20 @@ const History = (props) => {
   const [history, setHistory] = useState([]);
 
   useEffect(()=> {
-    axios.get(`/api/userHistory/${props.id}`).then(res => {
+    axios.get(`/api/userHistory/${props.userReducer.id}`).then(res => {
       setHistory(res.data.reverse());
     })
   }, [])
+
+  const deleteMeal = id => {
+    setHistory([])
+    axios.delete(`/api/meal/${id}`).then(res => {
+      console.log(res);
+    })
+    axios.get(`/api/userHistory/${props.userReducer.id}`).then(res => {
+      setHistory(res.data.reverse());
+    })
+  }
 
 
   const mappedHistory = history.map((e, i) => {
@@ -20,7 +30,7 @@ const History = (props) => {
     let joined = youAte.join(', ');
     return(
       <div className='table-row' key={i}>
-            {/* <div className='column s'><p></p></div> */}
+            <div className='column th s'><p><button onClick={() => deleteMeal(e.entry_id)}><i className="fas fa-trash-alt"></i></button></p></div>
             <div className='column th'><p>{e.entry_date} - {e.entry_time}</p></div>
             <div className='column th'><p>{e.meal_name}</p></div>
             <div className='column you-ate'><p>{joined}</p></div>
@@ -63,11 +73,11 @@ const History = (props) => {
   })
 
   return(
-    <div className={props.containerClass}>
+    <div className={props.reducer.containerClass}>
       <h1>HISTORY</h1>
       <div className='dash-bottom'>
         <div className='table-header'>
-          {/* <div className='column s'><p></p></div> */}
+          <div className='column s'><p><i className="fas fa-trash-alt"></i></p></div>
           <div className='column'><p>Date</p></div>
           <div className='column'><p>Meal Name</p></div>
           <div className='column you-ate-column'><p>You Ate</p></div>

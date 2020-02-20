@@ -308,9 +308,19 @@ body{
 }
 
 .s{
-  width: 20px;
-  border: none;
-  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+}
+
+.s button{
+  width: 30px;
+}
+
+.s button:hover {
+  width: 32px;
+  letter-spacing: normal;
 }
 
 .th{
@@ -413,6 +423,19 @@ input[type="file"] {
   width: 50%;
   text-align: left;
 }
+
+.profile-submit{
+  margin-right: 20%;
+  opacity: 1;
+  visibility: visible;
+  transition: all .25s ease;
+  background: green;
+}
+
+.profile-submit:hover{
+  background: green;
+}
+
 
 .history-table{
   height: 90%;
@@ -717,6 +740,7 @@ input[type="file"] {
 
 .hidden{
   opacity: 0;
+  visibility: hidden;
 }
 
 .register-button {
@@ -757,6 +781,24 @@ input[type="file"] {
 .fa-arrow-right{
   animation: point 1.5s infinite;
   transform: translateX(-10px);
+}
+
+.chart-container{
+  display: flex;
+  height: auto;
+}
+
+.chart-container div{
+  height: auto;
+}
+
+.canvas svg {
+  height: auto;
+  min-height: 600px;
+}
+
+svg rect:nth-of-type(2n + 0){
+  fill: green
 }
 
 a, #logout-button{
@@ -800,6 +842,7 @@ button {
   width: 100px;
   height: 25px;
   border: none;
+  border-radius: 6px;
   background: orange;
   outline: none;
   cursor: pointer;

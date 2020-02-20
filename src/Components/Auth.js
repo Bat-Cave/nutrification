@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
-import {updateUser} from '../dux/reducer'
+import {updateUser} from '../dux/userReducer';
 
 class Auth extends Component {
   constructor(props){
@@ -144,6 +144,7 @@ class Auth extends Component {
   
 
   render(){
+    console.log(this.props)
     if(this.props.location.pathname !== "/auth/register"){
     return(
       <div className='auth-container'>
