@@ -10,6 +10,7 @@ class Auth extends Component {
 
     this.state = {
       class: 'register-big',
+      loginClass: 'svg',
       loginError: 'error hidden',
       errorClass: 'error hidden',
       defaultProfilePic: ['https://nutrification.s3-us-west-1.amazonaws.com/apple.png', 'https://nutrification.s3-us-west-1.amazonaws.com/carrot.png', 'https://nutrification.s3-us-west-1.amazonaws.com/lemon.png', 'https://nutrification.s3-us-west-1.amazonaws.com/pepper.png'],
@@ -49,7 +50,11 @@ class Auth extends Component {
     let profile_pic = defaultProfilePic[index];
 
     axios.post('/api/register', {first_name, last_name, email, password, profile_pic, height, weight, age, activity_level, gender, rec_daily_calorie, rec_daily_protein, rec_daily_carb, rec_daily_fat, rec_daily_water}).then(res => {
+      console.log(res.data)
       this.props.updateUser(res.data);
+      setTimeout(()=> {
+        this.props.history.push('/')
+      }, 2000);
     }).catch(err => {
       console.log(err);
     })
@@ -58,17 +63,23 @@ class Auth extends Component {
     console.log(`Carb Intake: ${this.state.rec_daily_carb}`);
     console.log(`Fat Intake: ${this.state.rec_daily_fat}`);
     console.log(`Water Intake: ${this.state.rec_daily_water}`)
-    this.props.history.push('/');
   }
   loginUser = async () => {
+    this.setState({loginClass: 'svg loading'})
     const {email, password} = this.state;
     await axios.post('/api/login', {email, password}).then(res => {
       this.props.updateUser(res.data);
-      setTimeout(() => {this.props.history.push('/')}, 1000);
+      setTimeout(() => {
+        this.props.history.push('/')
+        this.setState({loginClass: 'svg'})
+      }, 1000);
     }).catch(err => {
       if(err){
+        this.setState({loginClass: 'svg'})
         this.setState({loginError: 'error'})
-        setTimeout(() => this.setState({loginError: 'error hidden'}), 5000)
+        setTimeout(() => {
+          this.setState({loginError: 'error hidden'})
+        }, 5000)
       }
       else {
         console.log('false')
@@ -149,7 +160,7 @@ class Auth extends Component {
       <div className='auth-container'>
         <div className='login-box'>
           <div className='logo'>
-            <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" className="svg-inline--fa fa-carrot fa-w-16">
+            <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" className={this.state.loginClass}>
             <title>carrot</title>
             <g>
               <title>Layer 1</title>
@@ -180,7 +191,7 @@ class Auth extends Component {
         <div className='auth-container'>
           <div className='login-box'>
             <div className='logo'>
-              <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" className="svg-inline--fa fa-carrot fa-w-16">
+              <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" className={this.state.loginClass}>
               <title>carrot</title>
               <g>
                 <title>Layer 1</title>
@@ -223,7 +234,7 @@ class Auth extends Component {
                 <input name='cpassword' type='password' placeholder='Confirm Password'
                 onChange={(e)=>this.handleInput(e.target.name, e.target.value)}/>
                 <div className='error-container'>
-                  <p className='error hidden'>Email already registered</p>
+                  <p className='error hidden'><i className="fas fa-exclamation-circle"></i>Email already registered</p>
                   <p className={this.state.errorClass}><i className="fas fa-exclamation-circle"></i> Passwords do not match</p>
                 </div>
                 

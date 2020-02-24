@@ -3,60 +3,67 @@ import axios from 'axios';
 import {connect} from 'react-redux';
 import {updatePic, updateUser} from '../dux/userReducer';
 
-const uploadFile = (file, signedRequest, id) => {
-  const options = {
-    headers: {
-      'Content-Type': file.type,
-    },
-  };
 
-  axios
-    .put(signedRequest, file, options)
-    .then(response => {
-      let file = response.config.data.name;
-      let baseUrl = 'https://nutrification.s3.us-west-1.amazonaws.com/nutrification-profile-'
-      let url = (`${baseUrl}${file}`)
-      axios.post('/api/profile/image', {url, id}).then(res => {
-        console.log('success')
-        updatePic(url);
-      }).catch(err => {
-        console.log(err)
-      })
-    })
-    .catch(err => {
-      if (err.response.status === 403) {
-        alert(
-          `Your request for a signed URL failed with a status 403. Double check the CORS configuration and bucket policy in the README. You also will want to double check your AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in your .env and ensure that they are the same as the ones that you created in the IAM dashboard. You may need to generate new keys\n${err.stack}`
-        );
-      } else {
-        alert(`ERROR: ${err.status}\n ${err.stack}`);
-      }
-    });
-};
-
-
-
-const getSignedRequest = ([file], id) => {
-  console.log(file);
-
-  const fileName = `nutrification-profile-${file.name.replace(/\s/g, '-')}`
-
-  axios.get('/sign-s3', {
-    params: {
-      'file-name': fileName,
-      'file-type': file.type
-    }
-  }).then( (response) => {
-    const { signedRequest} = response.data 
-    uploadFile(file, signedRequest, id)
-  }).catch( err => {
-    console.log(err)
-  })
-}
 
 
 const Profile = (props) => {
-
+  const activityLevels = ['Activity Level','Little or No Exercise', 'Light Exercise 1-3 days/week', 'Moderate Exercise 3-5 days/week','Hard Exercise 6-7 days/week', 'Very Hard Exercise']
+  const uploadFile = (file, signedRequest, id) => {
+    const options = {
+      headers: {
+        'Content-Type': file.type,
+      },
+    };
+  
+    axios
+      .put(signedRequest, file, options)
+      .then(response => {
+        let file = response.config.data.name;
+        let baseUrl = 'https://nutrification.s3.us-west-1.amazonaws.com/nutrification-profile-'
+        let url = (`${baseUrl}${file}`)
+        axios.post('/api/profile/image', {url, id}).then(async res => {
+          console.log('success')
+          updatePic(url);
+          await axios.get('/api/me').then(res => {
+            props.updateUser(res.data)
+          }).catch(err => {
+            console.log(err);
+            props.history.push('/')
+          })
+        }).catch(err => {
+          console.log(err)
+        })
+      })
+      .catch(err => {
+        if (err.response.status === 403) {
+          alert(
+            `Your request for a signed URL failed with a status 403. Double check the CORS configuration and bucket policy in the README. You also will want to double check your AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in your .env and ensure that they are the same as the ones that you created in the IAM dashboard. You may need to generate new keys\n${err.stack}`
+          );
+        } else {
+          alert(`ERROR: ${err.status}\n ${err.stack}`);
+        }
+      });
+  };
+  
+  
+  
+  const getSignedRequest = ([file], id) => {
+    console.log(file);
+  
+    const fileName = `nutrification-profile-${file.name.replace(/\s/g, '-')}`
+  
+    axios.get('/sign-s3', {
+      params: {
+        'file-name': fileName,
+        'file-type': file.type
+      }
+    }).then( (response) => {
+      const { signedRequest} = response.data 
+      uploadFile(file, signedRequest, id)
+    }).catch( err => {
+      console.log(err)
+    })
+  }
   const [editing, setEditing] = useState(false);
   const [submitClass, setSubmitClass] = useState('profile-submit hidden');
   const [profileInfo, setProfileInfo] = useState({
@@ -127,7 +134,14 @@ const Profile = (props) => {
           </div>
           <div className='profile-row'>
             <h4>Activity Level:</h4>
-            {editing ? <input name='activity_level' type='text' placeholder={props.userReducer.activity_level} onChange={(e) => handleInput(e.target.name, e.target.value)}/> : <p>{props.userReducer.activity_level}</p> }
+            {editing ? <select name='activity_level' onChange={(e)=>this.handleInput(e.target.name, e.target.value)}>
+                  <option value='0'>Activity Level</option>
+                  <option value='1'>Little or No Exercise</option>
+                  <option value='2'>Light Exercise 1-3 days/week</option>
+                  <option value='3'>Moderate Exercise 3-5 days/week</option>
+                  <option value='4'>Hard Exercise 6-7 days/week</option>
+                  <option value='5'>Very Hard Exercise</option>
+                </select> : <p>{activityLevels[props.userReducer.activity_level]}</p> }
           </div>
           <div className='profile-row'>
             <button onClick={() => toggleEdit()}>{editing ? <i className="fas fa-times"></i> : <i className="fas fa-pen"></i>}</button>

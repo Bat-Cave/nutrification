@@ -91,13 +91,16 @@ const Dashboard = (props) => {
     if(recommended[index]){
       rec = recommended[index].m_recommended
       unit = recommended[index].m_units
+    } else {
+      rec = 1;
+      
     }
+
     d3data.push(+rec)
     let percent = e*100/rec
     if(index >= 0){
       return(
         <div key={i} className='stat-container'>
-          
           <h4>{keys[index]}</h4>
           <div className='bar'><p className='consumed' style={{width: percent +'%'}}><span className='p-span'>{`${e.toFixed(2)} ${unit}`}</span></p></div>
           <div className='bar'><p className='recommended'>{rec} {unit}</p></div>

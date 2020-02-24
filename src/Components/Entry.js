@@ -17,7 +17,8 @@ class Entry extends Component{
       time: '', 
       dateDefault: '',
       mealName: '',
-      containerClass: 'container'
+      containerClass: 'container',
+      entryClass: 'entry-wrapper'
     }
   }
 
@@ -332,8 +333,17 @@ class Entry extends Component{
     })
   }
 
+  next = () => {
+    if(this.state.entryClass === 'entry-wrapper'){
+      this.setState({entryClass: 'entry-wrapper slide-left'})
+    } else {
+      this.setState({entryClass: 'entry-wrapper'})
+    }
+  }
+
   render(){
     const searchResults = this.state.searchResults.map((e, i) => {
+      console.log(e);
       let brandOwner = '';
       if(e.brandOwner){
         brandOwner = e.brandOwner.replace(/(\B)[^ ]*/g,match =>(match.toLowerCase())).replace(/^[^ ]/g,match=>(match.toUpperCase()));
@@ -375,8 +385,8 @@ class Entry extends Component{
     return(
       <div className={this.props.reducer.containerClass}>
         <h1>NEW ENTRY</h1>
-        <div className='entry-wrapper'>
-          <div className='entry-section'>
+        <div className={this.state.entryClass}>
+          <div className='entry-section m-right'>
             <div className='date-input'>
               <p>Date: </p>
               <input name='dateDefault' type='date' value={this.state.dateDefault} onChange={e => this.handleInput(e.target.name, e.target.value)}/>
@@ -399,8 +409,9 @@ class Entry extends Component{
                 </div>
               </div>
             </div>
+            <button onClick={() => this.next()}>Next</button>
           </div>
-          <div className='entry-section'>
+          <div className='entry-section m-left'>
             <div className='search-top'>
               <h3>Meal</h3>
               <div className='add-meal'>
@@ -417,6 +428,7 @@ class Entry extends Component{
               <div className='search-results'>
                 {mealItems.length === 0 ? <div className='div'>Add an item from the search results.</div> : mealItems}
               </div>
+            <button onClick={() => this.next()}>Back</button>
           </div>
         </div>
       </div>
