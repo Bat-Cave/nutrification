@@ -10,6 +10,7 @@ class Entry extends Component{
     this.state = {
       searchIn: '',
       brandIn: '',
+      waterIntake: 0,
       servings: 1,
       searchResults: [],
       meal: [],
@@ -122,7 +123,7 @@ class Entry extends Component{
       zinc: 0,
       protein: 0,
       fiber: 0,
-      water: 0,
+      water: +this.state.waterIntake,
       carbohydrates: 0,
       sugar: 0,
       fat: 0,
@@ -304,9 +305,6 @@ class Entry extends Component{
           if(rank === 1100 || rank === 1110){
             nutrients.carbohydrates += amount*this.state.meal[k].servings;
           }
-          if(rank === 100){
-            nutrients.water += (amount*this.state.meal[k].servings)/236.59;
-          }
           if(rank === 1520 || rank === 1510){
             nutrients.sugar += amount*this.state.meal[k].servings;
           }
@@ -331,6 +329,9 @@ class Entry extends Component{
     }).catch(err => {
       console.log(err)
     })
+    setTimeout(() => {
+      this.props.history.push('/');
+    }, 1000)
   }
 
   next = () => {
@@ -343,7 +344,6 @@ class Entry extends Component{
 
   render(){
     const searchResults = this.state.searchResults.map((e, i) => {
-      console.log(e);
       let brandOwner = '';
       if(e.brandOwner){
         brandOwner = e.brandOwner.replace(/(\B)[^ ]*/g,match =>(match.toLowerCase())).replace(/^[^ ]/g,match=>(match.toUpperCase()));
@@ -414,6 +414,10 @@ class Entry extends Component{
           <div className='entry-section m-left'>
             <div className='search-top'>
               <h3>Meal</h3>
+                <div className='water-container'>
+                  <p>Cups of Water: </p>
+                  <input id='water-intake' name='waterIntake' onChange={(e)=> this.handleInput(e.target.name, e.target.value)} value={this.state.waterIntake} type='number' />
+                </div>
               <div className='add-meal'>
                 <input id='stupid-input' name='mealName' type='text' onChange={(e)=> this.handleInput(e.target.name, e.target.value)} placeholder='Meal Name...'/>
                 <button onClick={() => this.addMeal()}>Add Meal</button>

@@ -8,10 +8,14 @@ import BarChart from './BarChart'
 const Dashboard = (props) => {
 
   const [history, setHistory] = useState([]);
-  const [today, setToday] = useState([]);
+  const [graphClass, setGraphClass] = useState('chart-toggle');
+  const [cardClass, setCardClass] = useState('stat-container');
+  const [graphButton, setGraphButton] = useState('graphButton');
+  const [cardButton, setCardButton] = useState('');
+  const [yyyymmdd, setyyyymmdd] = useState('');
   const [date, setDate] = useState('');
   const [recommended, setRecommended] = useState('');
-  const [keys, setKeys] = useState(["Biotin", "Folic Acid", "Niacin", "Pantothenic Acid", "Riboflavin", "Thiamin", "Vitamin A", "Vitamin B6", "Vitamin B12", "Vitamin C", "Vitamin D", "Vitamin E", "Vitamin K", "Calcium", "Chloride", "Chromium", "Copper", "Iodine", "Iron", "Magnesium", "Mangenese", "Molybdenum", "Phosphorus", "Potassium", "Selenium", "Sodium", "Zinc", "Protein", "Fiber", "Water", "Carbohydrates", "Sugar", "Fat", "Calories", "Alcohol", "Caffeine"]);
+  const keys = ["Biotin", "Folic Acid", "Niacin", "Pantothenic Acid", "Riboflavin", "Thiamin", "Vitamin A", "Vitamin B6", "Vitamin B12", "Vitamin C", "Vitamin D", "Vitamin E", "Vitamin K", "Calcium", "Chloride", "Chromium", "Copper", "Iodine", "Iron", "Magnesium", "Mangenese", "Molybdenum", "Phosphorus", "Potassium", "Selenium", "Sodium", "Zinc", "Protein", "Fiber", "Water", "Carbohydrates", "Sugar", "Fat", "Calories", "Alcohol", "Caffeine"]
 
   const getMe = () => {
     axios.get('/api/me').then(res => {
@@ -22,10 +26,30 @@ const Dashboard = (props) => {
     })
   }
 
-  let todaysHistory = history.filter(entry => entry.entry_date === date)
+  const toggleGraph = () => {
+    if(graphClass === 'chart-toggle'){
+      setGraphClass('chart-toggle none')
+      setGraphButton('opacity20')
+    } else {
+      setGraphClass('chart-toggle')
+      setGraphButton('graphButton')
+    }
+  }
 
+  const toggleCards = () => {
+    if(cardClass === 'stat-container'){
+      setCardClass('stat-container none')
+      setCardButton('opacity20')
+    } else {
+      setCardClass('stat-container')
+      setCardButton('')
+    }
+  }
+
+  
   let sum = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   function getTodayStats(){
+    let todaysHistory = history.filter(entry => entry.entry_date === date)
     for(let i = 0; i < todaysHistory.length; i++){
       for(let j = 6; j < Object.keys(todaysHistory[i]).length; j++){
         sum[j] = sum[j] + +todaysHistory[i][Object.keys(todaysHistory[i])[j]];
@@ -33,7 +57,7 @@ const Dashboard = (props) => {
       }
     }
   }
-  
+
   const getDate = () => {
     const d = new Date();
     const m = d.getMonth() + +1;
@@ -44,10 +68,20 @@ const Dashboard = (props) => {
         return `${d.getMonth()+ +1}`
       }
     }
+    setyyyymmdd(`${d.getFullYear()}-${month()}-${d.getDate()}`)
     const dateDefault = `${month()}/${d.getDate()}/${d.getFullYear()}`
     setDate(dateDefault)
   }
   
+  const setSelectionDate = (val) => {
+    setyyyymmdd(val)
+    let split = val.split('-')
+    let sdate = `${split[1]}/${split[2]}/${split[0]}`
+    
+    setDate(sdate)
+    getTodayStats();
+  }
+
   useEffect(() => {
     getMe();
     getDate();
@@ -73,8 +107,6 @@ const Dashboard = (props) => {
         {m_recommended: 0, m_units: 'g'})
       setRecommended(rec);
     })
-    setToday(todaysHistory);
-    
   }, [])
 
 
@@ -100,7 +132,7 @@ const Dashboard = (props) => {
     let percent = e*100/rec
     if(index >= 0){
       return(
-        <div key={i} className='stat-container'>
+        <div key={i} className={cardClass}>
           <h4>{keys[index]}</h4>
           <div className='bar'><p className='consumed' style={{width: percent +'%'}}><span className='p-span'>{`${e.toFixed(2)} ${unit}`}</span></p></div>
           <div className='bar'><p className='recommended'>{rec} {unit}</p></div>
@@ -119,11 +151,24 @@ const Dashboard = (props) => {
       <div className="dash-top">
         <div className='welcome-container'>
           <h2>Hello{props.userReducer.first_name ? `, ${props.userReducer.first_name}.` : null}</h2>
+          <button className={graphButton} onClick={() => toggleGraph()}>Nutrition Graph</button>
+          <button className={cardButton} onClick={() => toggleCards()}>Nutrition Cards</button>
         </div>
       </div>
       <div className='dash-middle'>
+        <div className='select-day-nutrition'>
+          <h3>Today's Nutrition</h3>
+          <input type='date' value={yyyymmdd} onChange={(e) => setSelectionDate(e.target.value)}/>
+          {/* <button>Get Nutrition</button> */}
+          <div className='graph-key'>
+            <p className='green-key'></p><p> - Recommended</p>
+            <p className='orange-key'></p><p> - Eaten</p>
+          </div>
+        </div>
         <div className='today-stats'>
-          <BarChart data={data}/>
+          <div className={graphClass}>
+            <BarChart data={data}/>
+          </div>
           {todayStats}
         </div>
       </div>

@@ -8,7 +8,9 @@ const express = require('express'),
       port = SERVER_PORT,
       ctrl = require('./controller'),
       app = express();
+const path = require('path');
 
+app.use( express.static( `${__dirname}/../build` ) );
 app.use(cors());
 app.use(express.json());
 
@@ -18,6 +20,8 @@ app.use(session({
   secret: SESSION_SECRET,
   cookie: {maxAge: 1000 * 60 * 60 * 10}
 }))
+
+
 
 app.post('/api/register', ctrl.register)
 app.post('/api/login', ctrl.login)
@@ -31,6 +35,9 @@ app.post('/api/auth/logout', ctrl.logout)
 app.put('/api/updateUser/:id', ctrl.updateUser)
 app.delete('/api/meal/:id', ctrl.deleteMeal)
 
+app.get('*', (req, res)=>{
+  res.sendFile(path.join(__dirname, '../build/index.html'));
+});
 
 massive(CONNECTION_STRING).then(db => {
   app.set('db', db);

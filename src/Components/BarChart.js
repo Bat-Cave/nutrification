@@ -16,6 +16,7 @@ class BarChart extends Component {
         setTimeout(() => {
           this.setState({loginClass: 'svg none'})
           this.setState({data: this.props.data})
+          d3.selectAll("svg").remove();
           this.drawBarChart(this.state.data, this.state.labels)
         }, 3000)
     }
@@ -107,7 +108,6 @@ class BarChart extends Component {
     render() {
       return(
         <div className='chart-container'>
-        <h3>Today's Nutrition</h3>
         <div className='logo'>
             <svg width="70" height="70" xmlns="http://www.w3.org/2000/svg" className={this.state.loginClass}>
             <title>carrot</title>
