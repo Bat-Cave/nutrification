@@ -14,8 +14,11 @@ const Dashboard = (props) => {
   const [cardButton, setCardButton] = useState('');
   const [yyyymmdd, setyyyymmdd] = useState('');
   const [date, setDate] = useState('');
+  const [data, setData] = useState([]);
   const [recommended, setRecommended] = useState('');
-  const keys = ["Biotin", "Folic Acid", "Niacin", "Pantothenic Acid", "Riboflavin", "Thiamin", "Vitamin A", "Vitamin B6", "Vitamin B12", "Vitamin C", "Vitamin D", "Vitamin E", "Vitamin K", "Calcium", "Chloride", "Chromium", "Copper", "Iodine", "Iron", "Magnesium", "Mangenese", "Molybdenum", "Phosphorus", "Potassium", "Selenium", "Sodium", "Zinc", "Protein", "Fiber", "Water", "Carbohydrates", "Sugar", "Fat", "Calories", "Alcohol", "Caffeine"]
+  const keys = ["Biotin", "Folic Acid", "Niacin", "Pantothenic Acid", "Riboflavin", "Thiamin", "Vitamin A", "Vitamin B6", "Vitamin B12", "Vitamin C", "Vitamin D", "Vitamin E", "Vitamin K", "Calcium", "Chloride", "Chromium", "Copper", "Iodine", "Iron", "Magnesium", "Mangenese", "Molybdenum", "Phosphorus", "Potassium", "Selenium", "Sodium", "Zinc", "Protein", "Fiber", "Water", "Carbohydrates", "Sugar", "Fat", "Calories", "Alcohol", "Caffeine"];
+  const units = ['mcg', 'mcg','mcg', 'mcg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'IU', 'IU', 'mg', 'mg', 'mcg', 'mcg', 'mg', 'mg', 'IU', 'IU', 'mg', 'mg', 'mcg', 'mcg', 'mg', 'mg', 'mg', 'mg', 'mcg', 'mcg', 'mg', 'mg', 'mcg', 'mcg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mcg', 'mcg', 'mg', 'mg', 'mg', 'mg', 'mcg', 'mcg', 'mg', 'mg', 'mg', 'mg', 'g', 'g', 'g', 'g', 'cups', 'cups', 'g', 'g', 'g', 'g', 'g', 'g', 'calories', 'calories', 'g', 'g', 'g', 'g']
+  const loginClass = 'svg';
 
   const getMe = () => {
     axios.get('/api/me').then(res => {
@@ -46,9 +49,8 @@ const Dashboard = (props) => {
     }
   }
 
-  
   let sum = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-  function getTodayStats(){
+  if(history){
     let todaysHistory = history.filter(entry => entry.entry_date === date)
     for(let i = 0; i < todaysHistory.length; i++){
       for(let j = 6; j < Object.keys(todaysHistory[i]).length; j++){
@@ -56,6 +58,7 @@ const Dashboard = (props) => {
         // console.log(todaysHistory[i][Object.keys(todaysHistory[i])[j]])
       }
     }
+
   }
 
   const getDate = () => {
@@ -71,6 +74,8 @@ const Dashboard = (props) => {
     setyyyymmdd(`${d.getFullYear()}-${month()}-${d.getDate()}`)
     const dateDefault = `${month()}/${d.getDate()}/${d.getFullYear()}`
     setDate(dateDefault)
+
+    console.log(`Got today's date: ${dateDefault}.`)
   }
   
   const setSelectionDate = (val) => {
@@ -79,9 +84,41 @@ const Dashboard = (props) => {
     let sdate = `${split[1]}/${split[2]}/${split[0]}`
     
     setDate(sdate)
-    getTodayStats();
+    setData(d3data)
+    console.log(`Set date to ${sdate}.`)
   }
 
+  let index;
+  let d3data = []
+  const todayStats = sum.map((e, i) => {
+    // console.log(`Mapping through sum[${i}]: ${e}.`)
+    index = i - 6;
+    d3data.push(+e.toFixed(2))
+    let rec = 0;
+    let unit = '';
+    if(recommended[index]){
+      rec = recommended[index].m_recommended
+      unit = recommended[index].m_units
+    } else {
+      rec = 1; 
+    }
+    
+    d3data.push(+rec)
+    let percent = e*100/rec
+    if(index >= 0){
+      return(
+        <div key={i} className={cardClass}>
+          <h4>{keys[index]}</h4>
+          <div className='bar'><p className='consumed' style={{width: percent +'%'}}><span className='p-span'>{`${e.toFixed(2)} ${unit}`}</span></p></div>
+          <div className='bar'><p className='recommended'>{rec} {unit}</p></div>
+        </div>
+      )
+    } else {
+      return null;
+    }
+  })
+  const d = d3data.splice(12, d3data.length - 12)
+ 
   useEffect(() => {
     getMe();
     getDate();
@@ -107,43 +144,12 @@ const Dashboard = (props) => {
         {m_recommended: 0, m_units: 'g'})
       setRecommended(rec);
     })
+    setData(d3data.splice(12, d3data.length - 12));
   }, [])
 
-
   
-  getTodayStats();
-
-  let index;
-  let d3data = [];
-  const todayStats = sum.map((e, i) => {
-    index = i - 6;
-    d3data.push(+e.toFixed(2))
-    let rec = 0;
-    let unit = '';
-    if(recommended[index]){
-      rec = recommended[index].m_recommended
-      unit = recommended[index].m_units
-    } else {
-      rec = 1;
-      
-    }
-
-    d3data.push(+rec)
-    let percent = e*100/rec
-    if(index >= 0){
-      return(
-        <div key={i} className={cardClass}>
-          <h4>{keys[index]}</h4>
-          <div className='bar'><p className='consumed' style={{width: percent +'%'}}><span className='p-span'>{`${e.toFixed(2)} ${unit}`}</span></p></div>
-          <div className='bar'><p className='recommended'>{rec} {unit}</p></div>
-        </div>
-      )
-    } else {
-      return null;
-    }
-  })
-
-  const data = d3data.splice(12, d3data.length - 12)
+  
+  
 
   return(
     <div className={props.reducer.containerClass}>
@@ -167,7 +173,7 @@ const Dashboard = (props) => {
         </div>
         <div className='today-stats'>
           <div className={graphClass}>
-            <BarChart data={data}/>
+            <BarChart data={d} />
           </div>
           {todayStats}
         </div>

@@ -12,17 +12,32 @@ class BarChart extends Component {
     }
   }
     componentDidMount() {
-      this.setState({loginClass: 'svg loading'})
         setTimeout(() => {
-          this.setState({loginClass: 'svg none'})
           this.setState({data: this.props.data})
-          d3.selectAll("svg").remove();
-          this.drawBarChart(this.state.data, this.state.labels)
+          this.drawBarChart(this.props.data, this.state.labels)
         }, 3000)
+      }
+      
+    componentDidUpdate(prevProps){
+      if(this.props !== prevProps){
+        this.setState({loginClass: 'svg loading'})
+        d3.select(".canvas").selectAll("svg").remove()
+        d3.select(".label").selectAll("svg").remove()
+        this.setState({loginClass: 'svg none'})
+        this.drawBarChart(this.props.data, this.state.labels)
+      }
+      setTimeout(() => {
+        d3.select(".canvas").selectAll("svg").remove()
+        d3.select(".label").selectAll("svg").remove()
+        this.drawBarChart(this.props.data, this.state.labels)
+      }, 3000)
     }
+
+  
+
     drawBarChart(data, labels) {
       const canvasHeight = 1350
-      const canvasWidth = window.innerWidth - (window.innerWidth * .4) - 208
+      const canvasWidth = window.innerWidth - (window.innerWidth * .35) - 208
       const topMargin = 0
       const scale = canvasWidth * .4
       const offset = 18
@@ -92,6 +107,33 @@ class BarChart extends Component {
             }
           })
           .text((dataPoint, i) => `${dataPoint} ${this.state.units[i]}`)
+
+          svgCanvas.selectAll("rect")
+          .transition()
+          .duration(500)
+          .attr("y", function(d, iteration) {
+            if((iteration + 1) % 2 === 0){
+              return iteration * offset + 14 + topMargin
+            } else {
+              return iteration * offset + 21 + topMargin
+            }
+          })
+          .attr("width", function(datapoint, i) {
+            if(datapoint === 0){
+              return 10
+            }
+            if((i + 1) % 2 === 0){
+              return (datapoint/datapoint) * scale + 10
+            } else {
+              if(data[i] > data[i+1]){
+                return scale + 10
+              } else {
+                return (data[i]/data[i+1]) * scale + 10
+              }
+            }
+          })
+          .delay(function(d,i){ return(i*100)})
+
       const svgLabel = d3.select(this.refs.label)
           .append('svg')
           .attr('width', 150)
@@ -102,7 +144,11 @@ class BarChart extends Component {
           .attr('x', 15)
           .attr('y', (dataPoint, iteration) => iteration * offset*2 + 36 + topMargin)
           .text((dataPoint, i) => `${labels[i]}`)
-      }
+
+        
+      svgLabel.exit().remove()
+      svgCanvas.exit().remove()
+    }
 
     
     render() {

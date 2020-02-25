@@ -466,6 +466,10 @@ input[type="file"] {
   padding: 8px 0;
 }
 
+.profile-row button{
+  margin: 0 8px 0 0;
+}
+
 .profile-row h4{
   width: 120px;
   text-align: left;
@@ -1136,7 +1140,6 @@ input[type="file"] {
   display: flex;
   width: auto;
   position: absolute;
-  margin-top: 48px;
   height: 1350px;
 }
 
@@ -1215,6 +1218,14 @@ th{
   text-align: left;
 }
 
+svg{
+  transition: 1s all ease;
+}
+
+rect{
+  transition: 1s all ease;
+}
+
 #carrot_1{
   color: orange;
 }
@@ -1264,3 +1275,6 @@ th{
   80%{transform: translateY(10px)}
   90%{transform: translateY(0px); }
 }
+
+
+
