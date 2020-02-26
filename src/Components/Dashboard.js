@@ -10,8 +10,10 @@ const Dashboard = (props) => {
 
   const [history, setHistory] = useState([]);
   const [graphClass, setGraphClass] = useState('chart-toggle');
+  const [chartClass, setChartClass] = useState('chart-js');
   const [cardClass, setCardClass] = useState('stat-container');
   const [graphButton, setGraphButton] = useState('graphButton');
+  const [chartButton, setChartButton] = useState('');
   const [cardButton, setCardButton] = useState('');
   const [yyyymmdd, setyyyymmdd] = useState('');
   const [date, setDate] = useState('');
@@ -48,6 +50,16 @@ const Dashboard = (props) => {
     } else {
       setCardClass('stat-container')
       setCardButton('')
+    }
+  }
+
+  const toggleChart = () => {
+    if(chartClass === 'chart-js'){
+      setChartClass('chart-js none')
+      setChartButton('opacity20')
+    } else {
+      setChartClass('chart-js')
+      setChartButton('')
     }
   }
 
@@ -153,19 +165,29 @@ const Dashboard = (props) => {
     setData(d3data.splice(12, d3data.length - 12));
   }, [])
 
+  let chartData = []
+  const chartJSData = () => {
+    for(let i = 0; i < d.length; i = i + 2){
+      if(+d[i] > +d[i+1]){
+        chartData.push(100)
+      }
+      chartData.push(Math.round((+d[i]/+d[i+1])*100))
+    }
+    console.log(chartData)
+  }
+  
+  chartJSData();
 
   const state = {
     labels: keys,
     datasets: [
       {
         label: "Nutrition",
-        backgroundColor: ['rgb(0,128,0)'],
-        data: d
+        backgroundColor: 'rgb(256,165,0)',
+        data: chartData
       }
     ]
   }
-  
-  
 
   return(
     <div className={props.reducer.containerClass}>
@@ -173,7 +195,8 @@ const Dashboard = (props) => {
       <div className="dash-top">
         <div className='welcome-container'>
           <h2>Hello{props.userReducer.first_name ? `, ${props.userReducer.first_name}.` : null}</h2>
-          <button className={graphButton} onClick={() => toggleGraph()}>Nutrition Graph</button>
+          <button className={graphButton} onClick={() => toggleGraph()}>Nutrition Bar Graph</button>
+          <button className={chartButton} onClick={() => toggleChart()}>Nutrition Chart</button>
           <button className={cardButton} onClick={() => toggleCards()}>Nutrition Cards</button>
         </div>
       </div>
@@ -190,15 +213,27 @@ const Dashboard = (props) => {
         <div className='today-stats'>
           <div className={graphClass}>
             <BarChart data={d} />
-            {/* <Bar
-              data={state}
-              options={{
-                legend:{
-                  display:true,
-                  position:'right'
-                }
-              }}
-            /> */}
+          </div>
+          <div className={chartClass}>
+            <Bar
+                data={state}
+                options={{
+                  padding:"0px",
+                  responsive: true,
+                  maintainAspectRatio:true,
+                  defaultFontSize:"12px",
+                  width:"400",
+                  height:"400",
+                  legend:{
+                    display:false,
+                    position:'right'
+                  },
+                  title: {
+                      display: true,
+                      text: '% of Nutrition'
+                  }
+                }}
+              />
           </div>
           {todayStats}
         </div>

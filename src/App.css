@@ -777,6 +777,16 @@ input[type="file"] {
   margin-right: 4px;
 }
 
+.chart-js{
+  width: 100%;
+  height: auto;
+  margin: 8px 0;
+  box-shadow: -2px -2px 8px rgba(255, 255, 255, 1),
+              -2px -2px 12px rgba(185, 185, 185, 0.5),
+              inset 2px 2px 4px rgba(141, 141, 141, 0.1),
+              2px 2px 8px rgba(0, 0, 0, .15);
+}
+
 @media screen and (max-width: 940px){
   .chart-toggle{
     display: none;
@@ -1185,9 +1195,10 @@ a:active, #logout-button:active{
 }
 
 button {
-  width: 100px;
+  min-width: 100px;
   height: 25px;
   border: none;
+  padding: 0 4px;
   border-radius: 6px;
   background: orange;
   outline: none;
