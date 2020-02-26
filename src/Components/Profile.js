@@ -93,6 +93,9 @@ const Profile = (props) => {
     axios.put(`/api/updateUser/${props.userReducer.id}`, {email, height, weight, gender, age, activity_level}).then(res => {
       console.log(res.data)
       props.updateUser(res.data)
+      setTimeout(() => {
+        props.history.push('/');
+      }, 1000)
     })
   }
 
@@ -134,7 +137,7 @@ const Profile = (props) => {
           </div>
           <div className='profile-row'>
             <h4>Activity Level:</h4>
-            {editing ? <select name='activity_level' onChange={(e)=>this.handleInput(e.target.name, e.target.value)}>
+            {editing ? <select name='activity_level' onChange={(e)=> handleInput(e.target.name, e.target.value)}>
                   <option value='0'>Activity Level</option>
                   <option value='1'>Little or No Exercise</option>
                   <option value='2'>Light Exercise 1-3 days/week</option>

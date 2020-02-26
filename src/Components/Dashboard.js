@@ -153,7 +153,6 @@ const Dashboard = (props) => {
     setData(d3data.splice(12, d3data.length - 12));
   }, [])
 
-  console.log(d)
 
   const state = {
     labels: keys,
