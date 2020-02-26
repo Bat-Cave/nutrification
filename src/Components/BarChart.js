@@ -72,16 +72,16 @@ class BarChart extends Component {
                   return iteration * offset + 21 + topMargin
                 }
               })
-              .on('mouseover', function (d, i) {
-                d3.select(this).transition()
-                     .duration('50')
-                     .attr('opacity', '.85');
-              })
-              .on('mouseout', function (d, i) {
-                    d3.select(this).transition()
-                        .duration('50')
-                        .attr('opacity', '1');
-              });
+              // .on('mouseover', function (d, i) {
+              //   d3.select(this).transition()
+              //        .duration('50')
+              //        .attr('opacity', '.85');
+              // })
+              // .on('mouseout', function (d, i) {
+              //       d3.select(this).transition()
+              //           .duration('50')
+              //           .attr('opacity', '1');
+              // });
       svgCanvas.selectAll('text')
       .data(data).enter()
           .append('text')
@@ -108,32 +108,7 @@ class BarChart extends Component {
           })
           .text((dataPoint, i) => `${dataPoint} ${this.state.units[i]}`)
 
-          svgCanvas.selectAll("rect")
-          .transition()
-          .duration(500)
-          .attr("y", function(d, iteration) {
-            if((iteration + 1) % 2 === 0){
-              return iteration * offset + 14 + topMargin
-            } else {
-              return iteration * offset + 21 + topMargin
-            }
-          })
-          .attr("width", function(datapoint, i) {
-            if(datapoint === 0){
-              return 10
-            }
-            if((i + 1) % 2 === 0){
-              return (datapoint/datapoint) * scale + 10
-            } else {
-              if(data[i] > data[i+1]){
-                return scale + 10
-              } else {
-                return (data[i]/data[i+1]) * scale + 10
-              }
-            }
-          })
-          .delay(function(d,i){ return(i*100)})
-
+          
       const svgLabel = d3.select(this.refs.label)
           .append('svg')
           .attr('width', 150)

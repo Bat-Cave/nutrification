@@ -3,7 +3,8 @@ import {connect} from 'react-redux';
 import {updateMealHistory} from '../dux/reducer';
 import {updateUser} from '../dux/userReducer';
 import axios from 'axios';
-import BarChart from './BarChart'
+import BarChart from './BarChart';
+import {Bar} from 'react-chartjs-2';
 
 const Dashboard = (props) => {
 
@@ -19,6 +20,7 @@ const Dashboard = (props) => {
   const keys = ["Biotin", "Folic Acid", "Niacin", "Pantothenic Acid", "Riboflavin", "Thiamin", "Vitamin A", "Vitamin B6", "Vitamin B12", "Vitamin C", "Vitamin D", "Vitamin E", "Vitamin K", "Calcium", "Chloride", "Chromium", "Copper", "Iodine", "Iron", "Magnesium", "Mangenese", "Molybdenum", "Phosphorus", "Potassium", "Selenium", "Sodium", "Zinc", "Protein", "Fiber", "Water", "Carbohydrates", "Sugar", "Fat", "Calories", "Alcohol", "Caffeine"];
   const units = ['mcg', 'mcg','mcg', 'mcg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'IU', 'IU', 'mg', 'mg', 'mcg', 'mcg', 'mg', 'mg', 'IU', 'IU', 'mg', 'mg', 'mcg', 'mcg', 'mg', 'mg', 'mg', 'mg', 'mcg', 'mcg', 'mg', 'mg', 'mcg', 'mcg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mg', 'mcg', 'mcg', 'mg', 'mg', 'mg', 'mg', 'mcg', 'mcg', 'mg', 'mg', 'mg', 'mg', 'g', 'g', 'g', 'g', 'cups', 'cups', 'g', 'g', 'g', 'g', 'g', 'g', 'calories', 'calories', 'g', 'g', 'g', 'g']
   const loginClass = 'svg';
+  
 
   const getMe = () => {
     axios.get('/api/me').then(res => {
@@ -104,7 +106,11 @@ const Dashboard = (props) => {
     }
     
     d3data.push(+rec)
+
     let percent = e*100/rec
+    if(e > rec){
+      percent = 100;
+    }
     if(index >= 0){
       return(
         <div key={i} className={cardClass}>
@@ -147,7 +153,18 @@ const Dashboard = (props) => {
     setData(d3data.splice(12, d3data.length - 12));
   }, [])
 
-  
+  console.log(d)
+
+  const state = {
+    labels: keys,
+    datasets: [
+      {
+        label: "Nutrition",
+        backgroundColor: ['rgb(0,128,0)'],
+        data: d
+      }
+    ]
+  }
   
   
 
@@ -174,6 +191,15 @@ const Dashboard = (props) => {
         <div className='today-stats'>
           <div className={graphClass}>
             <BarChart data={d} />
+            {/* <Bar
+              data={state}
+              options={{
+                legend:{
+                  display:true,
+                  position:'right'
+                }
+              }}
+            /> */}
           </div>
           {todayStats}
         </div>
