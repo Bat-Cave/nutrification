@@ -173,7 +173,6 @@ const Dashboard = (props) => {
       }
       chartData.push(Math.round((+d[i]/+d[i+1])*100))
     }
-    console.log(chartData)
   }
   
   chartJSData();

@@ -1195,7 +1195,7 @@ a:active, #logout-button:active{
 }
 
 button {
-  min-width: 100px;
+  width: 100px;
   height: 25px;
   border: none;
   padding: 0 4px;
@@ -1208,6 +1208,10 @@ button {
 
 button:hover {
   background: rgba(255, 166, 0, 0.75);
+}
+
+p button{
+  width: 50px;
 }
 
 h2 {

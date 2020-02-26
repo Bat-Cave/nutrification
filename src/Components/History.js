@@ -30,7 +30,7 @@ const History = (props) => {
     let joined = youAte.join(', ');
     return(
       <div className='table-row' key={i}>
-            <div className='column th s'><p><button onClick={() => deleteMeal(e.entry_id)}><i className="fas fa-trash-alt"></i></button></p></div>
+            <div className='column th s'><p><button id='delete' onClick={() => deleteMeal(e.entry_id)}><i className="fas fa-trash-alt"></i></button></p></div>
             <div className='column th'><p>{e.entry_date} - {e.entry_time}</p></div>
             <div className='column th'><p>{e.meal_name}</p></div>
             <div className='column you-ate'><p>{joined}</p></div>
