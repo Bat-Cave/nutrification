@@ -33,9 +33,8 @@ class BarChart extends Component {
       }, 3000)
     }
 
-  
-
     drawBarChart(data, labels) {
+      console.log(data)
       const canvasHeight = 1350
       const canvasWidth = window.innerWidth - (window.innerWidth * .35) - 208
       const topMargin = 0
