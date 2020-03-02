@@ -194,7 +194,7 @@ const Dashboard = (props) => {
       <div className="dash-top">
         <div className='welcome-container'>
           <h2>Hello{props.userReducer.first_name ? `, ${props.userReducer.first_name}.` : null}</h2>
-          <button className={graphButton} onClick={() => toggleGraph()}>Nutrition Bar Graph</button>
+          <button id='graph-button' className={graphButton} onClick={() => toggleGraph()}>Nutrition Bar Graph</button>
           <button className={chartButton} onClick={() => toggleChart()}>Nutrition Chart</button>
           <button className={cardButton} onClick={() => toggleCards()}>Nutrition Cards</button>
         </div>

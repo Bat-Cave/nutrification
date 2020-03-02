@@ -787,6 +787,10 @@ input[type="file"] {
               2px 2px 8px rgba(0, 0, 0, .15);
 }
 
+#graph-button{
+  width: auto;
+}
+
 @media screen and (max-width: 940px){
   .chart-toggle{
     display: none;
@@ -797,7 +801,7 @@ input[type="file"] {
   }
 }
 
-@media (max-width: 400px){
+@media (max-width: 425px){
   .app{
     display: column;
     flex-direction: column;
