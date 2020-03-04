@@ -14,6 +14,7 @@ class Entry extends Component{
       servings: 1,
       searchResults: [],
       meal: [],
+      details: 0,
       today: '',
       time: '', 
       dateDefault: '',
@@ -334,6 +335,12 @@ class Entry extends Component{
     }, 1000)
   }
 
+  getDetails = (id) => {
+    axios.get(`https://api.nal.usda.gov/fdc/v1/${id}?api_key=qESsREuVONxc32eM2XaBFLJU5FsTTMc7c0ZZ6f8x`).then(res => {
+      this.setState({details: res.data})
+    })
+  }
+
   next = () => {
     if(this.state.entryClass === 'entry-wrapper'){
       this.setState({entryClass: 'entry-wrapper slide-left'})
@@ -356,7 +363,7 @@ class Entry extends Component{
             <button onClick={() => this.addToMeal(this.state.servings, e.fdcId, e.description, e.brandOwner)}><i className="fas fa-plus"></i></button>
             <input name='servings' type='number' value={this.state.servings} onChange={e => this.handleInput(e.target.name, e.target.value)}/>
           </div>
-          <div className='search-column f'>{e.fdcId}</div>
+          <div className='search-column f'><button onClick={() => this.getDetails(e.fdcId)}>{e.fdcId}</button></div>
           <div className='search-column'>{e.description.replace(/(\B)[^ ]*/g,match =>(match.toLowerCase())).replace(/^[^ ]/g,match=>(match.toUpperCase()))}</div>
           <div className='search-column'>{brandOwner}</div>
         </div>
@@ -406,10 +413,18 @@ class Entry extends Component{
                 </div>
                 <div className='search-results'>
                   {searchResults.length === 0 ? <div className='div'>Search something above.</div> : searchResults}
+                  {this.state.details !== 0 ? <div className='food-details'>
+                    <div className='food-details-container'>
+                      <h3>NUTRITION FACTS</h3>
+                      <button onClick={() => this.setState({details: 0})}>X</button>
+                    </div>
+                  </div> : null}
                 </div>
               </div>
             </div>
-            <button onClick={() => this.next()}>Next</button>
+            <div id='next-container'>
+              <button onClick={() => this.next()}>Next</button>
+            </div>
           </div>
           <div className='entry-section m-left'>
             <div className='search-top'>
