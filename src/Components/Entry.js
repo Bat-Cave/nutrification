@@ -14,7 +14,7 @@ class Entry extends Component{
       servings: 1,
       searchResults: [],
       meal: [],
-      details: 0,
+      details: [],
       today: '',
       time: '', 
       dateDefault: '',
@@ -337,7 +337,8 @@ class Entry extends Component{
 
   getDetails = (id) => {
     axios.get(`https://api.nal.usda.gov/fdc/v1/${id}?api_key=qESsREuVONxc32eM2XaBFLJU5FsTTMc7c0ZZ6f8x`).then(res => {
-      this.setState({details: res.data})
+      console.log(res.data)
+      this.setState({details: [res.data]})
     })
   }
 
@@ -363,7 +364,7 @@ class Entry extends Component{
             <button onClick={() => this.addToMeal(this.state.servings, e.fdcId, e.description, e.brandOwner)}><i className="fas fa-plus"></i></button>
             <input name='servings' type='number' value={this.state.servings} onChange={e => this.handleInput(e.target.name, e.target.value)}/>
           </div>
-          <div className='search-column f'><button onClick={() => this.getDetails(e.fdcId)}>{e.fdcId}</button></div>
+          <div className='search-column f'><i className="fas fa-info-circle" onClick={() => this.getDetails(e.fdcId)}></i></div>
           <div className='search-column'>{e.description.replace(/(\B)[^ ]*/g,match =>(match.toLowerCase())).replace(/^[^ ]/g,match=>(match.toUpperCase()))}</div>
           <div className='search-column'>{brandOwner}</div>
         </div>
@@ -389,6 +390,19 @@ class Entry extends Component{
         </div>
       )
     })
+
+    const nutrients = this.state.details.length > 0 ? this.state.details[0].foodNutrients.map((e, i) => {
+      return(
+        <div className='nutrient-container'>
+          <h4>{e.nutrient.name}</h4>
+          <div className='amount-container'>
+            <p>{e.amount}</p>
+            <p>{e.nutrient.unitName}</p>
+          </div>
+        </div>
+      )
+    }) : null;
+
     return(
       <div className={this.props.reducer.containerClass}>
         <h1>NEW ENTRY</h1>
@@ -407,16 +421,21 @@ class Entry extends Component{
               <div className='search-table top'>
                 <div className='search-header'>
                   <div className='search-column h'>Servings</div>
-                  <div className='search-column f h'>FDC ID</div>
+                  <div className='search-column f h'>Details</div>
                   <div className='search-column h'>Description</div>
                   <div className='search-column h'>Brand</div>
                 </div>
                 <div className='search-results'>
                   {searchResults.length === 0 ? <div className='div'>Search something above.</div> : searchResults}
-                  {this.state.details !== 0 ? <div className='food-details'>
+                  {this.state.details.length > 0 ? <div className='food-details'>
                     <div className='food-details-container'>
-                      <h3>NUTRITION FACTS</h3>
-                      <button onClick={() => this.setState({details: 0})}>X</button>
+                      <div className='details-header'>
+                        <h3>NUTRITION FACTS</h3>
+                        <button onClick={() => this.setState({details: []})}>X</button>
+                      </div>
+                      <div className='nutrients-container'>
+                        {nutrients}
+                      </div>
                     </div>
                   </div> : null}
                 </div>

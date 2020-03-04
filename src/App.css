@@ -634,7 +634,7 @@ input[type="file"] {
   max-height: calc(100% - 50px);
   width: 100%;
   box-shadow: inset 0 0 4px 4px rgba(65, 65, 65, 0.5);
-  overflow-y: auto;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -649,7 +649,7 @@ input[type="file"] {
   height: 100%;
   top: 0;
   left: 0;
-  padding: 20%;
+  padding: 10% 20%;
   background: rgba(255, 255, 255, 0.8);
   animation: fade-in .25s;
   opacity: 1;
@@ -658,13 +658,51 @@ input[type="file"] {
 .food-details-container{
   position: relative;
   display: flex;
+  flex-direction: row;
   width: 100%;
   height: 100%;
-  border: 1px solid black;
+  background: white;
+  border: 2px solid green;
   border-radius: 8px;
-  padding: 16px;
+  padding: 16px 0;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
+.details-header{
+  display: flex;
+  width: 100%;
+  height: 30px;
+  padding: 0 16px;
+  justify-content: space-between;
+}
+
+.nutrient-container{
+  display: flex;
+  width: 48%;
+  justify-content: space-between;
+  border-bottom: 1px solid black;
+}
+
+
+
+.nutrients-container{
+  display: flex;
+  width: calc(100% - 16px);
+  height: calc(100% - 30px);
+  overflow-y: auto;
+  flex-wrap: wrap;
+  padding: 16px;
+  margin: 0 8px;
+  justify-content: space-between;
+  box-shadow: inset 0 0 4px 4px rgba(65, 65, 65, 0.5);
+}
+
+.amount-container{
+  display: flex;
+  width: 35%;
+  justify-content: flex-end;
+}
 
 #next-container{
   width: auto;
@@ -733,6 +771,12 @@ input[type="file"] {
 
 .f {
   width: 10%;
+  color: orange;
+}
+
+.fa-info-circle{
+  font-size: 20px;
+  cursor: pointer;
 }
 
 .h{
