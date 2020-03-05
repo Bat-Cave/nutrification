@@ -552,7 +552,7 @@ input[type="file"] {
   margin-right: 16px;
   margin-top: 0;
   width: 200px;
-  height: 30px;
+  height: 28px;
   text-align: center
 }
 
@@ -719,7 +719,6 @@ input[type="file"] {
 }
 
 .search-result{
-  min-height: 30px;
   height: auto;
   width: calc(100%);
   display: flex;
@@ -963,13 +962,18 @@ input[type="file"] {
   }
 
   .f {
-    width: 10%;
-    display: none;
+    width: 20px;
+  }
+
+  .search-result{
+    height: auto;
+
   }
 
   .search-column{
     width: calc(33%);
     height: auto;
+    padding: 4px 2px;
   }
 
   .h{
@@ -1060,6 +1064,19 @@ input[type="file"] {
   .login-box{
     width: 100vw;
     height: 100vh;
+  }
+
+  .food-details{
+    height: calc(100vh - 50px);
+    padding: 5% 1%;
+  }
+
+  .nutrient-container h4{
+    width: 65%;
+  }
+
+  .details-header{
+    height: auto;
   }
 }
 

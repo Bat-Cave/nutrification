@@ -396,7 +396,7 @@ class Entry extends Component{
         <div className='nutrient-container'>
           <h4>{e.nutrient.name}</h4>
           <div className='amount-container'>
-            <p>{e.amount}</p>
+            <p>{e.amount || 0}</p>
             <p>{e.nutrient.unitName}</p>
           </div>
         </div>
@@ -431,6 +431,7 @@ class Entry extends Component{
                     <div className='food-details-container'>
                       <div className='details-header'>
                         <h3>NUTRITION FACTS</h3>
+                        <p>{this.state.details[0].servingSize ? `Serving size: ${this.state.details[0].servingSize} ${this.state.details[0].servingSizeUnit}` : null} </p>
                         <button onClick={() => this.setState({details: []})}>X</button>
                       </div>
                       <div className='nutrients-container'>
