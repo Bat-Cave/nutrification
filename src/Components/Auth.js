@@ -184,6 +184,11 @@ class Auth extends Component {
             <Link to='/auth/register'><button>Register</button></Link>
           </div>
         </div>
+        <div className='login-box'>
+          <p className='about-title'>About</p>
+          <p>Nutrification was designed for those who like to go the extra mile. There are plenty of apps that can help you track your calories, but there are very few that track the vitamin and minerals you consume as well. Nutrification uses an API to access nutrition facts from anything that has a nutrition facts label on the back of it.</p>
+          <p>Getting proper nutrition is important for a healthy life. We are all different and we each require different nutrition.  Nutrification was developed with that in mind. Using health formulas from the FDA, Nutrification calculates your nutrition needs based on your height, weight, activity level, and more. </p>
+        </div>
       </div>
     )
     } else {
